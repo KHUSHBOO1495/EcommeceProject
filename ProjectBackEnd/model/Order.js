@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 
 const order = mongoose.Schema({
-    order_id: { type: mongoose.Schema.Types.ObjectId, required: true },
     order_status: { type: String, required: true },
     total_amount: { type: Number, required: true },
     shipping_address: { type: String, required: true },

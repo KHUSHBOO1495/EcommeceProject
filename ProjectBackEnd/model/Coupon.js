@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 
 const coupon = mongoose.Schema({
-    coupon_id: { type: mongoose.Schema.Types.ObjectId, required: true },
     coupon_code: { type: String, required: true, unique: true },
     discount_type: { type: String, required: true },
     discount_value: { type: Number, required: true },
@@ -10,4 +9,4 @@ const coupon = mongoose.Schema({
     usage_limit: { type: Number, required: true },
 })
 
-module.exports = mongoose.model("Coupon",coupon);
+module.exports = mongoose.model("Coupon", coupon);
