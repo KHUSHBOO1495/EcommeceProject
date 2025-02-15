@@ -1,31 +1,40 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-
-const productRoute = require('./routes/ProductRoutes');
-const categoryRoutes = require('./routes/CategoryRoutes');
-const cartRoutes = require('./routes/CartRoutes');
-const userRoute = require('./routes/UserRoutes');
-
 require('dotenv').config();
+const connectDB = require('./config/db');
 
-mongoose.connect(process.env.dbUrl).then(() => {
-    console.log('Connected to mongo DB');
+const authRoutes = require('./routes/AuthRoutes');
+const cartRoutes = require('./routes/CartRoutes');
+const categoryRoutes = require('./routes/CategoryRoutes');
+const couponRoutes = require('./routes/CouponRoutes');
+const discountRoutes = require('./routes/DiscountRoutes');
+const feedbackRoutes = require('./routes/FeedbackRoutes');
+const orderRoutes = require('./routes/OrderRoutes');
+const paymentRoutes = require('./routes/PaymentRoutes');
+const productRoute = require('./routes/ProductRoutes');
+const returnProductRoutes = require('./routes/ReturnProductRoutes');
+const userRoute = require('./routes/UserRoutes');
+const wishlistRoutes = require('./routes/WishlistRoutes');
 
-    const app = express();
+const app = express();
 
-    app.use(bodyParser.json());
+app.use(bodyParser.json());
 
-    app.use('/users', userRoute);
-    app.use('/products', productRoute);
-    app.use('/cart', cartRoutes);
-    app.use('/categories', categoryRoutes);
+connectDB();
 
+app.use('/authentication', authRoutes);
+app.use('/cart', cartRoutes);
+app.use('/category', categoryRoutes);
+app.use('/coupon', couponRoutes);
+app.use('/discount', discountRoutes);
+app.use('/feedback', feedbackRoutes);
+app.use('/order', orderRoutes);
+app.use('/payment', paymentRoutes);
+app.use('/product', productRoute);
+app.use('/return', returnProductRoutes);
+app.use('/user', userRoute);
+app.use('/wishlist', wishlistRoutes);
 
-    app.listen(process.env.PORT, () => {
-        console.log('Server started')
-    })
-
-}).catch((err) => {
-    console.log(err)
+app.listen(process.env.PORT, () => {
+    console.log('Server started')
 })

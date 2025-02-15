@@ -20,7 +20,7 @@ router.get("/:id", async (req, res) => {
 
 //GET orders of specific user
 
-//PUT(update) order status
+//PATCH(update) order status
 
 //POST(apply) discount to order
 
