@@ -3,6 +3,9 @@ const User = require("../model/User");
 
 const getAllCart = async (req, res) => {
     try {
+        if (req.user.role !== 'admin') {
+            return res.status(403).json({ message: "Access denied. Only Admin can view cart." });
+        }
         const cart = await Cart.find();
         if (!cart) {
             res.status(404).json({ message: "Your cart is empty!" });
@@ -16,6 +19,13 @@ const getAllCart = async (req, res) => {
 
 const getCartById = async (req, res) => {
     try {
+        const uId = req.user.user_id;
+        const user = await User.findById(uId);
+        
+        if(user.cart_id.toString() !== req.params.id){
+            return res.status(403).json({ message: "Access denied. You can't access this cart." });
+        }
+
         const cart = await Cart.findById(req.params.id);
         if (!cart) {
             res.status(404).json({ message: "Your cart is empty!" });
@@ -29,7 +39,7 @@ const getCartById = async (req, res) => {
 
 const getProductFromCart = async (req, res) => {
     try {
-        const { userId } = req.body;
+        const userId = req.user.user_id;
 
         const user = await User.findById(userId);
         const cart = await Cart.findOne(user.cart_id).populate('products.product_id')
@@ -46,16 +56,18 @@ const getProductFromCart = async (req, res) => {
 
 const insertProductInCart = async (req, res) => {
     try {
-        const { userId, productId, quantity } = req.body;
+        const { productId, quantity } = req.body;
+        const userId = req.user.user_id;
         const user = await User.findById(userId)
+        
         let cart = await Cart.findOne(user.cart_id)
         if (!cart) {
             cart = new Cart({ products: [], quantity: 0 });
             user.cart_id = cart._id;
             await user.save();
         }
-        const productAvailable = cart.products.findIndex(item => item.product_id.toString() === productId);
 
+        const productAvailable = cart.products.findIndex(item => item.product_id.toString() === productId);
         if (productAvailable >= 0) {
             cart.products[productAvailable].quantity += quantity;
         } else {
@@ -63,7 +75,6 @@ const insertProductInCart = async (req, res) => {
         }
 
         cart.quantity = cart.products.reduce((total, product) => total + product.quantity, 0);
-
         await cart.save();
 
         res.status(200).json({ message: 'Product inserted in cart' });

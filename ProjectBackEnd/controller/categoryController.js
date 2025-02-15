@@ -35,9 +35,6 @@ const createCategory = async (req, res) => {
 
 const updateCategory = async (req, res) => {
     try {
-        if (req.user.role !== 'admin') {
-            return res.status(403).json({ message: "Access denied. Only admins can delete categories." });
-        }
         const category = await Category.findByIdAndUpdate(req.params.id, req.body);
         res.json({ message: "Category updated successfully", category });
     } catch (error) {
@@ -47,10 +44,6 @@ const updateCategory = async (req, res) => {
 
 const deleteCategory = async (req, res) => {
     try {
-        if (req.user.role !== 'admin') {
-            return res.status(403).json({ message: "Access denied. Only admins can delete categories." });
-        }
-
         const categoryId = req.params.id;
         const category = await Category.findById(categoryId);
 

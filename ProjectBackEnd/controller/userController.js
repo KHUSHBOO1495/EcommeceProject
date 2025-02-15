@@ -4,6 +4,9 @@ const User = require("../model/User");
 //GET all users
 const getAllUser = async(req,res)=>{
     try{
+        if (req.user.role !== 'admin') {
+            return res.status(403).json({ message: "Access denied. Only Admin can view user." });
+        }
         const users = await User.find();
         res.status(200).json(users);
     }catch(error){
@@ -14,6 +17,13 @@ const getAllUser = async(req,res)=>{
 //GET user by id
 const getUserById = async(req,res)=>{
     try{
+        const userId = req.params.id;
+        const uId = req.user.user_id;
+        
+        if (userId !== uId && req.user.role !== 'admin') {
+            return res.status(403).json({ message: "Access denied. You cannot view users." });
+        }
+
         const users = await User.findById(req.params.id);
         if(!users){
             res.status(404).json({ message: "User not found!" });
@@ -27,6 +37,13 @@ const getUserById = async(req,res)=>{
 //PATCH user
 const updateUser = async(req,res)=>{
     try{
+        const userId = req.params.id;
+        const uId = req.user.user_id;
+        
+        if (userId !== uId) {
+            return res.status(403).json({ message: "Access denied. You cannot update users." });
+        }
+
         let updates = req.body;
         if(updates.newPassword){
             updates.password = await bcrypt.hash(updates.newPassword, 10);
@@ -44,10 +61,10 @@ const deleteUser = async(req,res)=>{
     try {
         
         const userId = req.params.id;
-        let uId = req.body;
-        // Check if the logged-in user is an admin
-        if (req.user.role !== 'admin' && userId !== uId) {
-            return res.status(403).json({ message: "Access denied. Only admins can delete users." });
+        const uId = req.user.user_id;
+        
+        if (userId !== uId) {
+            return res.status(403).json({ message: "Access denied. You cannot delete users." });
         }
 
         const user = await User.findById(userId);
