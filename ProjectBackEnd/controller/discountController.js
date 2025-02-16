@@ -25,18 +25,14 @@ const getDiscountById = async (req, res) => {
 
 const getAllActiveDiscount = async (req, res) => {
     try {
-        const discount = await Discount.find();
         const currentDate = new Date();
 
-        if (!discount) return res.status(404).json({ message: "Discount not found" });
+        const activeDiscounts = await Discount.find({
+            start_date: { $lte: currentDate },
+            end_date: { $gte: currentDate }
+        });
 
-        const activeDiscounts = discount.map((item) => {
-            if (currentDate >= item.start_date && currentDate <= item.end_date) {
-                return item;
-            }
-        })
-
-        if (!discount) return res.status(404).json({ message: "Active discount not found" });
+        if (activeDiscounts === 0) return res.status(404).json({ message: "No valid discount available" });
 
         res.status(200).json(activeDiscounts);
     } catch (error) {

@@ -1,37 +1,22 @@
 const express = require('express');
 const Coupon = require('../model/Coupon');
+const { getAllCoupon, getAllActiveCoupon, createCoupon, updateCoupon, deleteCoupon } = require('../controller/couponController');
+const { authenticate, authorize } = require('../middleware/authMiddleware');
 const router = express.Router();
 
 //GET all coupons
-router.get('/', async (req, res) => {
-    const data = await Coupon.find();
-    res.send(data);
-})
+router.get('/', authenticate, authorize("getAllCoupon"), getAllCoupon)
 
-//GET coupon by id
-router.get('/:id', async (req, res) => {
-    const data = await Coupon.findById(req.params.id);
-    res.send(data);
-})
-
-//POST(apply) coupon to order
+//GET all active coupons
+router.get('/active', authenticate, authorize("getAllActiveCoupon"), getAllActiveCoupon)
 
 //POST(create) coupon (admin)
-router.post('/', async(req,res)=>{
-    const data = await Coupon.create(req.body);
-    res.send(data);
-})
+router.post('/', authenticate, authorize("createCoupon"), createCoupon)
 
 //PATCH(update) coupon details (admin)
-router.patch('/:id', async (req, res) => {
-    const data = await Coupon.findByIdAndUpdate(req.params.id, req.body);
-    res.send(data);
-})
+router.patch('/:id', authenticate, authorize("updateCoupon"), updateCoupon)
 
 // DELETE coupon
-router.delete('/:id', async (req, res) => {
-    const data = await Coupon.findByIdAndDelete(req.params.id);
-    res.send(data);
-})
+router.delete('/:id', authenticate, authorize("deleteCoupon"), deleteCoupon)
 
 module.exports = router;

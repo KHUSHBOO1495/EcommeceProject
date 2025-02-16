@@ -5,7 +5,7 @@ const User = require('../model/User');
 //User Sign Up
 const registerUser = async(req,res)=>{
     try{
-        const {username, password, confirmPassword, first_name, last_name, email} = req.body;
+        const {username, password, confirmPassword, first_name, last_name, email, role} = req.body;
 
         if(!email || !password || !confirmPassword){
             return res.status(400).json({ message: "Email and Password are required" });
@@ -27,6 +27,7 @@ const registerUser = async(req,res)=>{
             first_name,
             last_name,
             email,
+            role,
             isActive:true,
             wishlist_id: "5f1a9f1b9c9d4f3f8a89e1b8",
             cart_id: "5f1a9f1b9c9d4f3f8a89e1b9"
