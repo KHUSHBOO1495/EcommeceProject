@@ -4,10 +4,10 @@ const { getAllCategory, updateCategory, getCategoryById, deleteCategory, createC
 const router = express.Router();
 
 //GET all category
-router.get("/", authenticate, getAllCategory);
+router.get("/", authenticate, authorize("getAllCategory"), getAllCategory);
 
 //GET category by id
-router.get("/:id", authenticate, getCategoryById);
+router.get("/:id", authenticate, authorize("getCategoryById"), getCategoryById);
 
 //POST category
 router.post("/", authenticate, authorize("createCategory"), createCategory);

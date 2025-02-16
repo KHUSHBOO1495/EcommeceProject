@@ -125,7 +125,7 @@ const deleteFeedback = async (req, res) => {
 
         const uId = req.user.user_id;
         const feedback = await Feedback.findById(req.params.id);
-        
+
         if (feedback.user_id.toString() !== uId) {
             return res.status(403).json({ message: "Access denied. You can't delete this feedback." });
         }

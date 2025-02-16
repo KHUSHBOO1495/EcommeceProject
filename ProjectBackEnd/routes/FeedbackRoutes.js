@@ -1,11 +1,10 @@
 const express = require('express');
-const Feedback = require('../model/Feedback');
 const { authenticate, authorize } = require('../middleware/authMiddleware');
 const { getAllFeedback, getAllFeedbackOfProduct, createFeedback, getFeedbackById, updateFeedback, deleteFeedback } = require('../controller/feedbackController');
 const router = express.Router();
 
 //GET all feedback
-router.get('/',  authenticate, authorize("getAllFeedback"), getAllFeedback)
+router.get('/', authenticate, authorize("getAllFeedback"), getAllFeedback)
 
 //GET all feedback for specific product
 router.get('/product/:productId', authenticate, authorize("getAllFeedbackOfProduct"), getAllFeedbackOfProduct)

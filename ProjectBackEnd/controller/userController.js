@@ -49,6 +49,8 @@ const updateUser = async(req,res)=>{
             updates.password = await bcrypt.hash(updates.newPassword, 10);
             delete updates.newPassword;
         }
+        updates.updated_at = Date.now();
+
         const user = await User.findByIdAndUpdate(req.params.id, updates, { new: true });
         res.json({message: "User updated successfully!", user});
     }catch(error){

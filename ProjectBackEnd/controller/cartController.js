@@ -3,9 +3,6 @@ const User = require("../model/User");
 
 const getAllCart = async (req, res) => {
     try {
-        if (req.user.role !== 'admin') {
-            return res.status(403).json({ message: "Access denied. Only Admin can view cart." });
-        }
         const cart = await Cart.find();
         if (!cart) {
             res.status(404).json({ message: "Your cart is empty!" });

@@ -1,26 +1,24 @@
 const express = require('express');
-const {authenticate} = require('../middleware/authMiddleware');
+const {authenticate, authorize} = require('../middleware/authMiddleware');
 const { getAllCart, getCartById, getProductFromCart, updateCartProduct, deleteProductFromCart, insertProductInCart } = require('../controller/cartController');
 const router = express.Router();
 
 //GET all cart
-router.get('/', authenticate, getAllCart)
+router.get('/', authenticate, authorize('getAllCart'), getAllCart)
 
 //GET product from user's cart
-router.get('/products', authenticate, getProductFromCart)
+router.get('/products', authenticate, authorize('getProductFromCart'), getProductFromCart)
 
 //GET cart by id
-router.get('/:id', authenticate, getCartById)
+router.get('/:id', authenticate,authorize('getCartById'), getCartById)
 
 //PATCH(update) cart
-router.patch('/:id',  authenticate, updateCartProduct)
+router.patch('/:id',  authenticate,authorize('updateCartProduct'), updateCartProduct)
 
 //DELETE product from cart
-router.delete('/:id', authenticate, deleteProductFromCart)
-
-//GET specific product from cart
+router.delete('/:id', authenticate,authorize('deleteProductFromCart'), deleteProductFromCart)
 
 //POST(insert) product inside user's cart
-router.post('/', authenticate, insertProductInCart)
+router.post('/', authenticate,authorize('insertProductInCart'), insertProductInCart)
 
 module.exports = router;

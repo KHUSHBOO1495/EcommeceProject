@@ -1,37 +1,24 @@
 const express = require('express');
-const Discount = require('../model/Discount');
+const { authenticate, authorize } = require('../middleware/authMiddleware');
+const { getAllDiscount, getDiscountById, getAllActiveDiscount, createDiscount, updateDiscount, deleteDiscount } = require('../controller/discountController');
 const router = express.Router();
 
 //GET all discount
-router.get('/', async (req, res) => {
-    const data = await Discount.find();
-    res.send(data);
-})
+router.get('/', authenticate, authorize("getAllDiscount"), getAllDiscount)
 
 //GET all active discounts
+router.get('/active', authenticate, authorize("getAllActiveDiscount"), getAllActiveDiscount)
 
 //GET discount details by id
-router.get('/:id', async (req, res) => {
-    const data = await Discount.findById(req.params.id);
-    res.send(data);
-})
+router.get('/:id', authenticate, authorize("getDiscountById"), getDiscountById)
 
 //POST(create) discount (admin)
-router.post('/', async (req, res) => {
-    const data = await User.create(req.body);
-    res.send(data);
-})
+router.post('/', authenticate, authorize("createDiscount"), createDiscount)
 
 //PATCH(update) discount details (admin)
-router.patch('/:id', async (req, res) => {
-    const data = await Discount.findByIdAndUpdate(req.params.id, req.body);
-    res.send(data);
-})
+router.patch('/:id', authenticate, authorize("updateDiscount"), updateDiscount)
 
 //DELETE discount
-router.delete('/:id', async (req, res) => {
-    const data = await Discount.findByIdAndDelete(req.params.id);
-    res.send(data);
-})
+router.delete('/:id', authenticate, authorize("deleteDiscount"), deleteDiscount)
 
 module.exports = router;

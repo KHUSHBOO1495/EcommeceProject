@@ -1,37 +1,24 @@
 const express = require('express');
-const Wishlist = require('../model/Wishlist');
+const { getAllWishlist, getWishlistById, getProductFromWishlist, updateWishlistProduct, deleteProductFromWishlist, insertProductInWishlist } = require('../controller/wishlistController');
+const { authenticate, authorize } = require('../middleware/authMiddleware');
 const router = express.Router();
 
-//GET all cart
-router.get('/', async(req,res)=>{
-    const data = await Wishlist.find();
-    res.send(data);
-})
-    
-//GET cart by id
-router.get('/:id', async(req,res)=>{
-    const data = await Wishlist.findById(req.params.id);
-    res.send(data);
-})
-    
+//GET all wishlist
+router.get('/', authenticate, authorize('getAllWishlist'),getAllWishlist)
+
 //GET product from user's wishlist
+router.get('/products', authenticate, authorize('getProductFromWishlist'), getProductFromWishlist)
 
-//GET specific product from wishlist
-
-//POST(insert) product inside user's wishlist
-
-//DELETE product from wishlist
+//GET wishlist by id
+router.get('/:id', authenticate,authorize('getWishlistById'), getWishlistById)
 
 //PATCH(update) wishlist
-router.patch('/:id', async(req,res)=>{
-    const data = await Wishlist.findByIdAndUpdate(req.params.id,req.body);
-    res.send(data);
-})
+router.patch('/:id',  authenticate, authorize('updateWishlistProduct'), updateWishlistProduct)
 
-//DELETE wishlist
-router.delete('/:id', async(req,res)=>{
-    const data = await Wishlist.findByIdAndDelete(req.params.id);
-    res.send(data);
-})
+//DELETE product from wishlist
+router.delete('/:id', authenticate, authorize('deleteProductFromWishlist'), deleteProductFromWishlist)
+
+//POST(insert) product inside user's wishlist
+router.post('/', authenticate, authorize('insertProductInWishlist'), insertProductInWishlist)
 
 module.exports = router;
