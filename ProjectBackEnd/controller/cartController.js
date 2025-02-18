@@ -82,6 +82,13 @@ const insertProductInCart = async (req, res) => {
 
 const updateCartProduct = async (req, res) => {
     try {
+        const uId = req.user.user_id;
+        const user = await User.findById(uId);
+        
+        if(user.cart_id.toString() !== req.params.id){
+            return res.status(403).json({ message: "Access denied. You can't access this cart." });
+        }
+
         const { productId, quantity } = req.body;
         const { id } = req.params;
 
@@ -113,6 +120,13 @@ const updateCartProduct = async (req, res) => {
 
 const deleteProductFromCart = async (req, res) => {
     try {
+        const uId = req.user.user_id;
+        const user = await User.findById(uId);
+        
+        if(user.cart_id.toString() !== req.params.id){
+            return res.status(403).json({ message: "Access denied. You can't access this cart." });
+        }
+        
         const { productId } = req.body;
 
         const cart = await Cart.findById(req.params.id)

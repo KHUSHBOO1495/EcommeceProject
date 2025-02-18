@@ -4,9 +4,6 @@ const User = require("../model/User");
 //GET all users
 const getAllUser = async(req,res)=>{
     try{
-        if (req.user.role !== 'admin') {
-            return res.status(403).json({ message: "Access denied. Only Admin can view user." });
-        }
         const users = await User.find();
         res.status(200).json(users);
     }catch(error){
@@ -40,7 +37,7 @@ const updateUser = async(req,res)=>{
         const userId = req.params.id;
         const uId = req.user.user_id;
         
-        if (userId !== uId) {
+        if (userId !== uId && req.user.role !== 'admin') {
             return res.status(403).json({ message: "Access denied. You cannot update users." });
         }
 
@@ -65,7 +62,7 @@ const deleteUser = async(req,res)=>{
         const userId = req.params.id;
         const uId = req.user.user_id;
         
-        if (userId !== uId) {
+        if (userId !== uId && req.user.role !== 'admin') {
             return res.status(403).json({ message: "Access denied. You cannot delete users." });
         }
 

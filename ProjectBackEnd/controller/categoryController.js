@@ -25,7 +25,13 @@ const getCategoryById = async (req, res) => {
 
 const createCategory = async (req, res) => {
     try {
-        const newCategory = await Category.findOne({ category_name: req.body.category_name });
+        const { category_name, description, image_url } = req.body;
+
+        if (!category_name && !description && !image_url) {
+            res.status(404).json({ message: "Category details are required!" });
+        }
+
+        const newCategory = await Category.findOne({ category_name });
 
         if (newCategory) return res.status(400).json({ message: "Category already exists" });
 

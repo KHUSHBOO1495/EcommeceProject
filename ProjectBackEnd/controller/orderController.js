@@ -136,7 +136,7 @@ const updateOrderStatus = async (req, res) => {
             return res.status(404).json({ message: "Order not found." });
         }
 
-        const validStatuses = ["Pending", "Processing", "Shipped", "Delivered", "Cancelled"];
+        const validStatuses = ["Pending", "Paid", "Processing", "Shipped", "Delivered", "Cancelled"];
         if (!validStatuses.includes(order_status)) {
             return res.status(400).json({ message: "Invalid order status." });
         }
