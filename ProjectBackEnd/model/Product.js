@@ -5,11 +5,12 @@ const product = mongoose.Schema({
     description: String,
     product_price: { type: Number, required: true },
     product_stock: { type: Number, required: true },
-    image_url: String,
+    image_url: [ String ],
+    size: { type: Number },
     created_at: { type: Date, default: Date.now },
     updated_at: { type: Date, default: Date.now },
     category_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true },
-    discount_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Discount' },
+    discount_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Discount', default: null },
 });
 
 module.exports = mongoose.model("Product", product);

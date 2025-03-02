@@ -97,25 +97,31 @@ const getProductById = async (req, res) => {
 
 const createProduct = async (req, res) => {
     try {
-        const { product_name, description, product_price, product_stock, image_url, category_id, discount_id } = req.body;
+        const { product_name, description, product_price, product_stock, image_url, category_id, discount_id, size } = req.body;
 
-        if (!product_name || !product_price || !product_stock || !category_id) {
+        if (!product_name || !product_price || !product_stock || !category_id || !size) {
             return res.status(400).json({ message: 'Missing required fields' });
         }
 
-        const newProduct = new Product({
+        const newProductData = {
             product_name,
             description,
             product_price,
             product_stock,
             image_url,
             category_id,
-            discount_id,
+            size,
             created_at: Date.now(),
-            updated_at: Date.now()
-        });
+            updated_at: Date.now(),
+        };
 
+        if (discount_id) {
+            newProductData.discount_id = discount_id;
+        }
+
+        const newProduct = new Product(newProductData);
         await newProduct.save();
+            
         res.status(201).json({ message: 'Product created successfully', product: newProduct });
     } catch (error) {
         res.status(500).json({ message: "Internal Server Error" });

@@ -5,7 +5,7 @@ const User = require('../model/User');
 //User Sign Up
 const registerUser = async(req,res)=>{
     try{
-        const {username, password, confirmPassword, first_name, last_name, email, role} = req.body;
+        const { password, confirmPassword, phone_number, first_name, last_name, email} = req.body;
 
         if(!email || !password || !confirmPassword){
             return res.status(400).json({ message: "Email and Password are required" });
@@ -22,15 +22,11 @@ const registerUser = async(req,res)=>{
 
         const hashPass = await bcrypt.hash(password, 10);
         const newUser = new User({
-            username,
             password: hashPass,
+            phone_number,
             first_name,
             last_name,
-            email,
-            role,
-            isActive:true,
-            wishlist_id: "5f1a9f1b9c9d4f3f8a89e1b8",
-            cart_id: "5f1a9f1b9c9d4f3f8a89e1b9"
+            email
         })
         await newUser.save();
         res.status(201).json({ message: "Sign Up Successfully!", user_id: newUser._id });
@@ -44,9 +40,9 @@ const registerUser = async(req,res)=>{
 //User Login
 const loginUser = async(req,res)=>{
     try{
-        const {username, password} = req.body;
+        const {email, password} = req.body;
 
-        const user = await User.findOne({ username })
+        const user = await User.findOne({ email })
 
         if(!user){
             return res.status(400).json({ message: "User not found." });
@@ -55,6 +51,10 @@ const loginUser = async(req,res)=>{
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.status(400).json({ message: "Invalid Credentials" });
+        }
+
+        if(!user.isActive){
+            return res.status(400).json({ message: "User doesn't exist." });
         }
 
         const token = jwt.sign({ user_id: user._id, role: user.role }, process.env.jwtKey, { expiresIn: "1h" });

@@ -1,6 +1,7 @@
 const Cart = require("../model/Cart");
 const Coupon = require("../model/Coupon");
 const Order = require("../model/Order");
+const Product = require("../model/Product");
 const User = require("../model/User");
 
 const getAllOrder = async (req, res) => {
@@ -52,7 +53,7 @@ const getAllOrderOfUser = async (req,res) => {
     }
 }
 
-const createOrder = async (req, res) => {
+const createOrderFromCart = async (req, res) => {
     try {
         const { shipping_address, coupon_code } = req.body;
         const user_id = req.user.user_id;
@@ -62,6 +63,15 @@ const createOrder = async (req, res) => {
         }
 
         const user = await User.findById(user_id);
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        if (!user.address) {
+            user.address = shipping_address;
+            await user.save();
+        }
+
         const cart = await Cart.findOne(user.cart_id).populate('products.product_id')
         if (!cart || cart.products.length === 0) {
             return res.status(400).json({ message: "Cart is empty" });
@@ -75,6 +85,12 @@ const createOrder = async (req, res) => {
 
             const product = item.product_id;
             totalAmount += product.product_price * item.quantity;
+
+            if (product.product_stock < item.quantity) {
+                return res.status(400).json({ message: `Insufficient stock for ${product.product_name}` });
+            }
+            product.product_stock -= item.quantity;
+            await product.save();
 
             orderItems.push({
                 product_id: product._id,
@@ -126,6 +142,78 @@ const createOrder = async (req, res) => {
     }
 }
 
+const createSingleOrder = async (req, res) => {
+    try {
+        const { product_id, quantity, shipping_address, coupon_code } = req.body;
+        const user_id = req.user.user_id;
+
+        if (!user_id || !product_id || !quantity || !shipping_address) {
+            return res.status(400).json({ message: "User ID, Product ID, quantity, and shipping address are required" });
+        }
+
+        const user = await User.findById(user_id);
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        if (!user.address) {
+            user.address = shipping_address;
+            await user.save();
+        }
+
+        const product = await Product.findById(product_id);
+        if (!product) {
+            return res.status(404).json({ message: "Product not found" });
+        }
+
+        if (product.product_stock < quantity) {
+            return res.status(400).json({ message: `Insufficient stock for ${product.product_name}` });
+        }
+
+        let totalAmount = product.product_price * quantity;
+        let coupon_id = null;
+        let discountValue = 0;
+
+        if (coupon_code) {
+            const coupon = await Coupon.findOne({ coupon_code: coupon_code });
+
+            if (!coupon || coupon.usage_limit <= 0 || new Date() > coupon.valid_to) {
+                return res.status(400).json({ message: "Invalid or expired coupon" });
+            }
+
+            if (coupon.discount_type === "percentage") {
+                discountValue = (totalAmount * coupon.discount_value) / 100;
+            } else {
+                discountValue = coupon.discount_value;
+            }
+
+            totalAmount = Math.max(totalAmount - discountValue, 0);
+            coupon.usage_limit -= 1;
+            await coupon.save();
+            coupon_id = coupon._id;
+        }
+
+        product.product_stock -= quantity;
+        await product.save();
+
+        const newOrder = new Order({
+            user_id,
+            shipping_address,
+            order_items: [{ product_id, quantity }],
+            total_amount: totalAmount,
+            order_status: "Pending",
+            coupon_id,
+            payment_id: null
+        });
+
+        await newOrder.save();
+
+        res.status(201).json({ message: "Order placed successfully!", order: newOrder });
+    } catch (error) {
+        res.status(500).json({ message: "Internal Server Error", error: error.message });
+    }
+};
+
 const updateOrderStatus = async (req, res) => {
     try {
         const { id } = req.params;
@@ -170,4 +258,4 @@ const softDeleteOrder = async (req, res) => {
     }
 };
 
-module.exports = { createOrder, getAllOrder, getOrderById, updateOrderStatus, getAllOrderOfUser, softDeleteOrder }
+module.exports = { createOrderFromCart, createSingleOrder, getAllOrder, getOrderById, updateOrderStatus, getAllOrderOfUser, softDeleteOrder }

@@ -1,6 +1,6 @@
 const express = require("express");
 const { authenticate, authorize } = require("../middleware/authMiddleware");
-const { createOrder, getAllOrder, getOrderById, updateOrderStatus, getAllOrderOfUser, softDeleteOrder } = require("../controller/orderController");
+const { getAllOrder, getOrderById, updateOrderStatus, getAllOrderOfUser, softDeleteOrder, createOrderFromCart, createSingleOrder } = require("../controller/orderController");
 const router = express.Router();
 
 //GET all order
@@ -12,8 +12,11 @@ router.get('/user', authenticate, authorize("getAllOrderOfUser"), getAllOrderOfU
 //GET order by id
 router.get("/:id", authenticate, authorize("getOrderById"), getOrderById);
 
-//POST(create) order
-router.post('/', authenticate, authorize("createOrder"), createOrder)
+//POST(create) order from cart
+router.post('/cart', authenticate, authorize("createOrderFromCart"), createOrderFromCart)
+
+//POST(create) single order
+router.post('/', authenticate, authorize("createSingleOrder"), createSingleOrder)
 
 //PATCH(update) order status
 router.patch("/:id", authenticate, authorize("updateOrderStatus"), updateOrderStatus);

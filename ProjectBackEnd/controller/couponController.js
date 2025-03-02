@@ -5,7 +5,7 @@ const getAllCoupon = async (req, res) => {
     try {
         const coupons = await Coupon.find();
         if (!coupons) {
-            res.status(404).json({ message: "Category not found" });
+            res.status(404).json({ message: "Coupon not found" });
         }
         res.status(200).json(coupons);
     } catch (error) {

@@ -2,7 +2,11 @@ const mongoose = require('mongoose');
 
 const payment = mongoose.Schema({
     payment_method: { type: String, enum: ['COD', 'Razorpay'], required: true },  // Only COD and Razorpay
-    payment_status: { type: String, enum: ['Pending', 'Completed', 'Failed'], default: 'Pending' },
+    payment_status: {
+        type: String,
+        enum: ['Pending', 'Completed', 'Failed'],
+        default: 'Pending'
+    },
     amount: { type: Number, required: true },
     payment_date: { type: Date, default: Date.now },
     transaction_id: { type: String, default: null },  // Store Transaction ID for COD or Razorpay
