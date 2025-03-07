@@ -1,40 +1,123 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import Swal from 'sweetalert2';
 
 const RegistrationForm = () => {
+  const apiUrl = 'http://localhost:3000/authentication/register'
+  const [data,setData] = useState({})
+  const navigate = useNavigate();
+
+  const handleSubmit = (e) => {
+    e.preventDefault(); // Prevent form submission (page refresh)
+    
+    fetch(apiUrl, {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+    .then(res => {
+      if (!res.ok) {  // If the status code is not OK (not in 200-299 range)
+        return res.json().then(error => {
+          // Reject with the error message from the response body
+          throw new Error(error.message || 'An error occurred during registration');
+        });
+      }
+      return res.json(); // If status is OK, parse the response JSON
+    }) 
+    .then(res => {
+      console.log("Response from API:", res);
+      // If no error, proceed to store the token and show success alert
+      localStorage.setItem('token', res.token); // Store the token in local storage
+  
+      Swal.fire({
+        title: 'Welcome!',
+        text: 'You have successfully registered.',
+        icon: 'success',
+        confirmButtonText: 'Continue',
+        confirmButtonColor: '#4CAF50', // Green Button
+        background: '#f9f9f9', // Light Background
+        color: '#333', // Text Color
+        timer: 2500, // Auto-close after 2.5 seconds
+        timerProgressBar: true, // Show progress bar
+        showClass: {
+          popup: 'animate__animated animate__fadeInDown' // Fancy animation
+        },
+        hideClass: {
+          popup: 'animate__animated animate__fadeOutUp' // Fancy animation
+        }
+      }).then(() => {
+        navigate("/"); // Redirect to home page after success
+      });
+    })
+    .catch(err => {
+      console.error("Error during registration:", err);
+  
+      // Show SweetAlert2 error popup on failure (network issues, invalid data, etc.)
+      Swal.fire({
+        title: 'Oops!',
+        text: err.message || 'An error occurred during registration. Please try again.',
+        icon: 'error',
+        confirmButtonText: 'Try Again',
+        confirmButtonColor: '#FF5733', // Red Button
+        background: '#fce4e4', // Light Red Background
+        color: '#900', // Darker Red Text
+        showClass: {
+          popup: 'animate__animated animate__shakeX' // Shake animation for error
+        },
+        hideClass: {
+          popup: 'animate__animated animate__fadeOut' // Fade out animation
+        }
+      });
+    });
+  };
+  
   return (
     <StyledWrapper>
-      <form className="form">
+      <form className="form" onSubmit={handleSubmit}>
         <p className="title">Register </p>
         <p className="message">Signup now and get full access to our app. </p>
         <div className="flex">
           <label>
-            <input className="input" type="text" placeholder required />
+            <input className="input" type="text" placeholder required onChange={(e)=>{
+              setData({...data, first_name:e.target.value})
+            }}/>
             <span>Firstname</span>
           </label>
           <label>
-            <input className="input" type="text" placeholder required />
+            <input className="input" type="text" placeholder required onChange={(e)=>{
+              setData({...data, last_name:e.target.value})
+            }} />
             <span>Lastname</span>
           </label>
         </div>
         <label>
-          <input className="input" type="email" placeholder required />
+          <input className="input" type="email" placeholder required onChange={(e)=>{
+              setData({...data, email:e.target.value})
+            }} />
           <span>Email</span>
         </label>
         <label>
-          <input class="input" type="tel" placeholder required />
+          <input class="input" type="tel" placeholder required onChange={(e)=>{
+              setData({...data, phone_number:e.target.value})
+            }} />
           <span>Phone Number</span>
         </label>
         <label>
-          <input className="input" type="password" placeholder required />
+          <input className="input" type="password" placeholder required onChange={(e)=>{
+              setData({...data, password:e.target.value})
+            }} />
           <span>Password</span>
         </label>
         <label>
-          <input className="input" type="password" placeholder required />
+          <input className="input" type="password" placeholder required onChange={(e)=>{
+              setData({...data, confirmPassword:e.target.value})
+            }} />
           <span>Confirm password</span>
         </label>
-        <button className="submit">Submit</button>
+        <button className="submit" type='submit'>Register</button>
         <p className="signin">Already have an acount ? <Link className="nav-link" to="/login">Login</Link> </p>
       </form>
     </StyledWrapper>

@@ -12,13 +12,13 @@ router.get('/products', authenticate, authorize('getProductFromCart'), getProduc
 //GET cart by id
 router.get('/:id', authenticate,authorize('getCartById'), getCartById)
 
+//POST(insert) product inside user's cart
+router.post('/', authenticate,authorize('insertProductInCart'), insertProductInCart)
+
 //PATCH(update) cart
 router.patch('/:id',  authenticate,authorize('updateCartProduct'), updateCartProduct)
 
 //DELETE product from cart
 router.delete('/:id', authenticate,authorize('deleteProductFromCart'), deleteProductFromCart)
-
-//POST(insert) product inside user's cart
-router.post('/', authenticate,authorize('insertProductInCart'), insertProductInCart)
 
 module.exports = router;

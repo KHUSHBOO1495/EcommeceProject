@@ -4,16 +4,16 @@ const roles = require('../config/roles');
 const authenticate = (req, res, next) => {
     console.log(req.headers);
     
-    const token = req.headers["value"];
+    const token = req.headers["authorization"];
     console.log("token:",token);
     
     if(!token) {
         return res.status(401).json({ message: "Access Denied for authentication" });
     }
-
+    
     try {
         const decoded = jwt.verify(token.split(" ")[1], process.env.jwtKey);
-        req.user = decoded;  //to store user data in request
+        req.user = decoded;
         next();
     } catch (error) {
         res.status(400).json({ message: "Invalid Token" });
