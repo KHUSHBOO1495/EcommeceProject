@@ -333,26 +333,26 @@ function Layout() {
 
         </div>
 
-        <header>
+        <header className="hstyle">
             <div className="container-fluid">
-                <div className="row py-3 border-bottom">
+                <div className="row py-3">
 
                     <div className="col-sm-4 col-lg-2 text-center text-sm-start d-flex gap-3 justify-content-center justify-content-md-start">
                         <div className="d-flex align-items-center my-3 my-sm-0">
                             <a href="index.html">
-                                <img src="images/logo.svg" alt="logo" className="img-fluid" />
+                                <img src="images/logo.jpg" alt="logo" className="img-fluid" width="150"/>
                             </a>
                         </div>
-                        <button className="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
+                        <button className="navbar-toggler mx-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
                             aria-controls="offcanvasNavbar">
                             <svg width="24" height="24" viewBox="0 0 24 24"><use xlinkHref="#menu"></use></svg>
                         </button>
                     </div>
 
                     <div className="col-sm-6 offset-sm-2 offset-md-0 col-lg-4">
-                        <div className="search-bar row bg-light p-2 rounded-4">
+                        <div className="search-bar row p-2 rounded-4">
                             <div className="col-md-4 d-none d-md-block">
-                                <select className="form-select border-0 bg-transparent">
+                                <select className="form-select border-0">
                                     <option>All Categories</option>
                                     <option>Groceries</option>
                                     <option>Drinks</option>
@@ -361,7 +361,7 @@ function Layout() {
                             </div>
                             <div className="col-11 col-md-7">
                                 <form id="search-form" className="text-center" action="index.html" method="post">
-                                    <input type="text" className="form-control border-0 bg-transparent" placeholder="Search for more than 20,000 products" />
+                                    <input type="text" className="form-control border-0 bg-transparent" placeholder="Search products here..." />
                                 </form>
                             </div>
                             <div className="col-1">
@@ -421,29 +421,29 @@ function Layout() {
 
         <section className="cover">
             <div className="container-lg">
-                <div className="row">
-                    <div className="col-lg-6 pt-5 mt-5">
-                        <h2 className="display-1 ls-1"><span className="fw-bold text-primary">Organic</span> Foods at your <span className="fw-bold">Doorsteps</span></h2>
-                        <p className="fs-4">Dignissim massa diam elementum.</p>
-                        <div className="d-flex gap-3">
+                <div className="row justify-content-end">
+                    <div className="col-lg-6 pt-5 my-5">
+                        <h2 className="display-1 ls-1 text-light"><span className="fw-bold">Weaving Heritage,</span> Defining Elegance.</h2>
+                        <p className="fs-4  text-light">Wear the Legacy, Live the Tradition.</p>
+                        {/* <div className="d-flex gap-3">
                             <a href="#" className="btn btn-primary text-uppercase fs-6 rounded-pill px-4 py-3 mt-3">Start Shopping</a>
                             <a href="#" className="btn btn-dark text-uppercase fs-6 rounded-pill px-4 py-3 mt-3">Join Now</a>
-                        </div>
+                        </div> */}
                         <div className="row my-5">
                             <div className="col">
-                                <div className="row text-dark">
+                                <div className="row text-light">
                                     <div className="col-auto"><p className="fs-1 fw-bold lh-sm mb-0">14k+</p></div>
                                     <div className="col"><p className="text-uppercase lh-sm mb-0">Product Varieties</p></div>
                                 </div>
                             </div>
                             <div className="col">
-                                <div className="row text-dark">
+                                <div className="row text-light">
                                     <div className="col-auto"><p className="fs-1 fw-bold lh-sm mb-0">50k+</p></div>
                                     <div className="col"><p className="text-uppercase lh-sm mb-0">Happy Customers</p></div>
                                 </div>
                             </div>
                             <div className="col">
-                                <div className="row text-dark">
+                                <div className="row text-light">
                                     <div className="col-auto"><p className="fs-1 fw-bold lh-sm mb-0">10+</p></div>
                                     <div className="col"><p className="text-uppercase lh-sm mb-0">Store Locations</p></div>
                                 </div>
@@ -452,7 +452,7 @@ function Layout() {
                     </div>
                 </div>
 
-                <div className="row row-cols-1 row-cols-sm-3 row-cols-lg-3 g-0 justify-content-center">
+                {/* <div className="row row-cols-1 row-cols-sm-3 row-cols-lg-3 g-0 justify-content-center">
                     <div className="col">
                         <div className="card border-0 bg-primary rounded-0 p-4 text-light">
                             <div className="row">
@@ -498,7 +498,7 @@ function Layout() {
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> */}
 
             </div>
         </section>
@@ -512,7 +512,8 @@ function Layout() {
                             <h2 className="section-title">Category</h2>
 
                             <div className="d-flex align-items-center">
-                                <a href="#" className="btn btn-primary me-2">View All</a>
+                                <a href="#" className="btn btn-primary me-2" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
+                            aria-controls="offcanvasNavbar">View All</a>
                                 <div className="swiper-buttons">
                                     <button className="swiper-prev category-carousel-prev btn btn-yellow">❮</button>
                                     <button className="swiper-next category-carousel-next btn btn-yellow">❯</button>

@@ -1,0 +1,22 @@
+<div class="styled-wrapper">
+  <form class="form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <p class="title">Login</p>
+    <p class="message">Welcome Back ! </p>
+    <label>
+      <input class="input" type="email" placeholder formControlName="email" />
+      <span>Email</span>
+      <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" class="error">
+        Please enter a valid email.
+      </div>
+    </label>
+    <label>
+      <input class="input" type="password" placeholder formControlName="password" />
+      <span>Password</span>
+      <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="error">
+        Password is required (minimum 6 characters).
+      </div>
+    </label>
+    <button class="submit" type="submit">Login</button>
+    <p class="signin">Already have an account? <a class="nav-link" routerLink="/register">Signup</a></p>
+  </form>
+</div>

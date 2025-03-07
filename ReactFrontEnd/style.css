@@ -30,7 +30,7 @@ body {
   --bs-body-line-height: 2;
   --bs-body-color: #747474;
 
-  --bs-primary: #6BB252;
+  --bs-primary: rgba(95, 31, 67, 1.0);
   --bs-primary-rgb: 107, 178, 82;
   
   --bs-secondary: #364127;
@@ -52,7 +52,7 @@ body {
   --bs-btn-bg: var(--bs-primary);
   --bs-btn-border-color: transparent;
   --bs-btn-hover-color: #fff;
-  --bs-btn-hover-bg: #f7a422;
+  --bs-btn-hover-bg: #77415f;
   --bs-btn-hover-border-color: transparent;
   --bs-btn-focus-shadow-rgb: 49,132,253;
   --bs-btn-active-color: #fff;
@@ -99,8 +99,8 @@ body {
   --bs-btn-color: #747474;
   --bs-btn-bg: #FCF7EB;
   --bs-btn-border-color: #FCF7EB;
-  --bs-btn-hover-color: #747474;
-  --bs-btn-hover-bg: #FFECBE;
+  --bs-btn-hover-color: rgba(255, 240, 235, 1.0);
+  --bs-btn-hover-bg: #77415f;
   --bs-btn-hover-border-color: #FFECBE;
   --bs-btn-focus-shadow-rgb: 217,164,6;
   --bs-btn-active-color: #000;
@@ -145,7 +145,7 @@ body {
 }
 
 .cover{
-  background-image: url('images/banner-1.jpg');background-repeat: no-repeat;background-size: cover;
+  background-image: url('images/Bride_Tribe_Desktop2.png');background-repeat: no-repeat;background-size: cover;
 }
 
 .discount1{
@@ -166,7 +166,34 @@ body {
 
 body {
   letter-spacing: 0.03em;
+  background-color: rgba(252, 252, 252, 1.0);
 }
+.hstyle {
+  color: rgba(95, 31, 67, 1.0); /* Apply text color */
+}
+
+.hstyle a,
+.hstyle svg {
+  color: rgba(95, 31, 67, 1.0); /* Apply color to links and icons */
+}
+
+.hstyle a:hover,
+.hstyle svg:hover {
+  color: #77415f; /* Optional: Change color on hover for better UX */
+}
+.search-bar{
+  border: 3px solid rgba(95, 31, 67, 1.0);
+}
+.search-bar input:focus,
+.search-bar select:focus {
+    outline: none;
+    box-shadow: none;
+}
+.form-select option:hover {
+  background-color: rgba(95, 31, 67, 1.0); /* Custom hover color */
+  color: #ffffff;
+}
+
 h1,h2,h3,h4,h5,h6 {
   font-family: var(--heading-font);
   color: var(--bs-dark);
@@ -296,7 +323,7 @@ h1,h2,h3,h4,h5,h6 {
   text-align: center;
   border-radius: 10px;
   --bs-btn-border-color: transparent;
-  --bs-btn-active-bg: #ec9b22;
+  --bs-btn-active-bg: #77415f;
   --bs-btn-active-border-color: transparent;
   --bs-btn-hover-bg: var(--bs-primary);
   --bs-btn-hover-border-color: transparent;

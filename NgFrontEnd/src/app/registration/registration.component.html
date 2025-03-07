@@ -1,0 +1,53 @@
+<div class="styled-wrapper">
+    <form class="form" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <p class="title">Register</p>
+      <p class="message">Signup now and get full access to our app.</p>
+      <div class="flex">
+        <label>
+          <input class="input" type="text" placeholder formControlName="first_name" />
+          <span>Firstname</span>
+          <div *ngIf="registerForm.get('first_name')?.invalid && registerForm.get('first_name')?.touched" class="error">
+            Required!
+          </div>
+        </label>
+        <label>
+          <input class="input" type="text" placeholder formControlName="last_name" />
+          <span>Lastname</span>
+          <div *ngIf="registerForm.get('last_name')?.invalid && registerForm.get('last_name')?.touched" class="error">
+            Required!
+          </div>
+        </label>
+      </div>
+      <label>
+          <input class="input" type="email" placeholder formControlName="email" />
+          <span>Email</span>
+          <div *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched" class="error">
+            Please enter a valid email.
+          </div>
+        </label>
+        <label>
+          <input class="input" type="tel" placeholder formControlName="phone_number" />
+          <span>Phone Number</span>
+          <div *ngIf="registerForm.get('phone_number')?.invalid && registerForm.get('phone_number')?.touched && registerForm.get('phone_number')?.errors?.['pattern']" class="error">
+            Please enter a valid Phone Number.
+          </div>
+        </label>
+      <label>
+        <input class="input" type="password" placeholder formControlName="password" />
+        <span>Password</span>
+        <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched" class="error">
+          Password is required (minimum 6 characters).
+        </div>
+      </label>
+      <label>
+        <input class="input" type="password" placeholder formControlName="confirmPassword" />
+        <span>Confirm password</span>
+        <div *ngIf="registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched" class="error">
+          Password doesn't match.
+        </div>
+      </label>
+      <button class="submit" type="submit">Register</button>
+      <p class="signin">Already have an account? <a class="nav-link" routerLink="/login">Login</a></p>
+    </form>
+  </div>
+  

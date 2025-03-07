@@ -29,7 +29,8 @@ const registerUser = async(req,res)=>{
             email
         })
         await newUser.save();
-        res.status(201).json({ message: "Sign Up Successfully!", user_id: newUser._id });
+        const token = jwt.sign({ user_id: newUser._id }, process.env.jwtKey, { expiresIn: "1h" });
+        res.status(201).json({ token, message: "Sign Up Successfully!", user_id: newUser._id });
 
     }catch(error){
         console.error(error);
@@ -50,7 +51,7 @@ const loginUser = async(req,res)=>{
 
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
-            return res.status(400).json({ message: "Invalid Credentials" });
+            return res.status(400).json({ message: "Incorrect Password" });
         }
 
         if(!user.isActive){

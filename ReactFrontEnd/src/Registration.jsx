@@ -3,38 +3,42 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const RegistrationForm = () => {
-    return (
-        <StyledWrapper>
-            <form className="form">
-                <p className="title">Register </p>
-                <p className="message">Signup now and get full access to our app. </p>
-                <div className="flex">
-                    <label>
-                        <input className="input" type="text" placeholder required />
-                        <span>Firstname</span>
-                    </label>
-                    <label>
-                        <input className="input" type="text" placeholder required />
-                        <span>Lastname</span>
-                    </label>
-                </div>
-                <label>
-                    <input className="input" type="email" placeholder required />
-                    <span>Email</span>
-                </label>
-                <label>
-                    <input className="input" type="password" placeholder required />
-                    <span>Password</span>
-                </label>
-                <label>
-                    <input className="input" type="password" placeholder required />
-                    <span>Confirm password</span>
-                </label>
-                <button className="submit">Submit</button>
-                <p className="signin">Already have an acount ? <Link className="nav-link" to="/login">Login</Link> </p>
-            </form>
-        </StyledWrapper>
-    );
+  return (
+    <StyledWrapper>
+      <form className="form">
+        <p className="title">Register </p>
+        <p className="message">Signup now and get full access to our app. </p>
+        <div className="flex">
+          <label>
+            <input className="input" type="text" placeholder required />
+            <span>Firstname</span>
+          </label>
+          <label>
+            <input className="input" type="text" placeholder required />
+            <span>Lastname</span>
+          </label>
+        </div>
+        <label>
+          <input className="input" type="email" placeholder required />
+          <span>Email</span>
+        </label>
+        <label>
+          <input class="input" type="tel" placeholder required />
+          <span>Phone Number</span>
+        </label>
+        <label>
+          <input className="input" type="password" placeholder required />
+          <span>Password</span>
+        </label>
+        <label>
+          <input className="input" type="password" placeholder required />
+          <span>Confirm password</span>
+        </label>
+        <button className="submit">Submit</button>
+        <p className="signin">Already have an acount ? <Link className="nav-link" to="/login">Login</Link> </p>
+      </form>
+    </StyledWrapper>
+  );
 }
 
 const StyledWrapper = styled.div`
@@ -56,9 +60,9 @@ const StyledWrapper = styled.div`
     width: 100%;   /* Ensure the form uses 100% of the container width */
     padding: 20px;
     border-radius: 20px;
-    background-color: #1a1a1a;
-    color: #fff;
-    border: 1px solid #333;
+    background-color: #fff;
+    color: #333;
+    border: 1px solid #5F1F43;
   }
 
   .title {
@@ -69,7 +73,7 @@ const StyledWrapper = styled.div`
     display: flex;
     align-items: center;
     padding-left: 30px;
-    color: #00bfff;
+    color: #77415f;
   }
 
   .title::before {
@@ -91,13 +95,13 @@ const StyledWrapper = styled.div`
     width: 16px;
     border-radius: 50%;
     left: 0px;
-    background-color: #00bfff;
+    background-color: #77415f;
   }
 
   .message, 
   .signin {
     font-size: 14.5px;
-    color: rgba(255, 255, 255, 0.7);
+    color: rgba(0, 0, 0, 0.7);
   }
 
   .signin {
@@ -105,11 +109,11 @@ const StyledWrapper = styled.div`
   }
 
   .signin a:hover {
-    text-decoration: underline royalblue;
+    text-decoration: underline 77415f;
   }
 
   .signin a {
-    color: #00bfff;
+    color: #77415f;
   }
 
   .flex {
@@ -123,8 +127,8 @@ const StyledWrapper = styled.div`
   }
 
   .form label .input {
-    background-color: #333;
-    color: #fff;
+    background-color: #f9f9f9;
+    color: #333;
     width: 100%;
     padding: 20px 05px 05px 10px;
     outline: 0;
@@ -133,7 +137,7 @@ const StyledWrapper = styled.div`
   }
 
   .form label .input + span {
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(0, 0, 0, 0.5);
     position: absolute;
     left: 10px;
     top: 0px;
@@ -149,7 +153,7 @@ const StyledWrapper = styled.div`
 
   .form label .input:focus + span,
   .form label .input:valid + span {
-    color: #00bfff;
+    color: #77415f;
     top: 0px;
     font-size: 0.7em;
     font-weight: 600;
@@ -167,11 +171,11 @@ const StyledWrapper = styled.div`
     color: #fff;
     font-size: 16px;
     transform: .3s ease;
-    background-color: #00bfff;
+    background-color: #77415f;
   }
 
   .submit:hover {
-    background-color: #00bfff96;
+    background-color:rgba(119, 65, 95, 0.88);
   }
 
   @keyframes pulse {

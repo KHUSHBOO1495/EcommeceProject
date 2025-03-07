@@ -4,7 +4,7 @@ const { authenticate, authorize } = require("../middleware/authMiddleware");
 const router = express.Router();
 
 //GET all products
-router.get("/", authenticate, authorize("getAllProduct"), getAllProduct);
+router.get("/", authenticate, authorize("getAllProduct"),  getAllProduct);
 
 //GET product by id
 router.get("/:id", authenticate, authorize("getProductById"), getProductById);

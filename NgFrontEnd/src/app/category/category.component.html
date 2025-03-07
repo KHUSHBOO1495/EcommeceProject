@@ -7,7 +7,8 @@
                     <h2 class="section-title">Category</h2>
 
                     <div class="d-flex align-items-center">
-                        <a href="#" class="btn btn-primary me-2">View All</a>
+                        <a href="#" class="btn btn-primary me-2" data-bs-toggle="offcanvas"
+                        data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">View All</a>
                         <div class="swiper-buttons">
                             <button class="swiper-prev category-carousel-prev btn btn-yellow">❮</button>
                             <button class="swiper-next category-carousel-next btn btn-yellow">❯</button>
@@ -22,11 +23,12 @@
 
                 <div class="category-carousel swiper">
                     <div class="swiper-wrapper">
-                        <a href="category.html" class="nav-link swiper-slide text-center">
-                            <img src="images/category-thumb-1.jpg" class="rounded-circle" alt="Category Thumbnail">
-                            <h4 class="fs-6 mt-3 fw-normal category-title">Fruits & Veges</h4>
+                        <a *ngFor="let cat of data" class="nav-link swiper-slide text-center">
+                            <div (click)="getProductByCat(cat._id)">
+                            <img src={{cat.image_url}} class="rounded-circle" alt="Category Thumbnail" height="165">
+                            <h4 class="fs-6 mt-3 fw-normal category-title">{{cat.category_name}}</h4></div>
                         </a>
-                        <a href="category.html" class="nav-link swiper-slide text-center">
+                        <!-- <a href="category.html" class="nav-link swiper-slide text-center">
                             <img src="images/category-thumb-2.jpg" class="rounded-circle" alt="Category Thumbnail">
                             <h4 class="fs-6 mt-3 fw-normal category-title">Breads & Sweets</h4>
                         </a>
@@ -69,7 +71,7 @@
                         <a href="category.html" class="nav-link swiper-slide text-center">
                             <img src="images/category-thumb-4.jpg" class="rounded-circle" alt="Category Thumbnail">
                             <h4 class="fs-6 mt-3 fw-normal category-title">Breads</h4>
-                        </a>
+                        </a> -->
 
                     </div>
                 </div>

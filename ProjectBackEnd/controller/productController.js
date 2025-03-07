@@ -44,6 +44,7 @@ const getAllProduct = async (req, res) => {
                 product_name: product.product_name,
                 image_url: product.image_url,
                 category_name: product.category_id.category_name,
+                category_id: product.category_id._id,
                 original_price: product.product_price,
                 discount_value: discountValue,
                 final_price: finalPrice,

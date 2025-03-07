@@ -44,22 +44,22 @@
 <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar">
 
     <div class="offcanvas-header justify-content-between">
-        <h4 class="fw-normal text-uppercase fs-6">Menu</h4>
+        <h4 class="fw-normal text-uppercase fs-6">Category</h4>
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
 
     <div class="offcanvas-body">
 
         <ul class="navbar-nav justify-content-end menu-list list-unstyled d-flex gap-md-3 mb-0">
-            <li class="nav-item border-dashed active">
+            <li *ngFor="let cat of data" class="nav-item border-dashed active">
                 <a href="index.html" class="nav-link d-flex align-items-center gap-3 text-dark p-2">
-                    <svg width="24" height="24" viewBox="0 0 24 24">
+                    <!-- <svg width="24" height="24" viewBox="0 0 24 24">
                         <use xlink:href="#fruits"></use>
-                    </svg>
-                    <span>Fruits and vegetables</span>
+                    </svg> -->
+                    <span>{{cat.category_name}}</span>
                 </a>
             </li>
-            <li class="nav-item border-dashed">
+            <!-- <li class="nav-item border-dashed">
                 <a href="index.html" class="nav-link d-flex align-items-center gap-3 text-dark p-2">
                     <svg width="24" height="24" viewBox="0 0 24 24">
                         <use xlink:href="#dairy"></use>
@@ -198,14 +198,14 @@
                     </svg>
                     <span>Pet Food and Supplies</span>
                 </a>
-            </li>
+            </li> -->
         </ul>
 
     </div>
 
 </div>
 
-<header>
+<header class="hstyle">
     <div class="container-fluid">
         <div class="row py-3 border-bottom">
 
@@ -213,10 +213,10 @@
                 class="col-sm-4 col-lg-2 text-center text-sm-start d-flex gap-3 justify-content-center justify-content-md-start">
                 <div class="d-flex align-items-center my-3 my-sm-0">
                     <a href="index.html">
-                        <img src="images/logo.svg" alt="logo" class="img-fluid">
+                        <img src="images/logo_ng.jpg" alt="logo" class="img-fluid" width="150">
                     </a>
                 </div>
-                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
+                <button class="navbar-toggler mx-3" type="button" data-bs-toggle="offcanvas"
                     data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
                     <svg width="24" height="24" viewBox="0 0 24 24">
                         <use xlink:href="#menu"></use>
@@ -253,7 +253,7 @@
                 <ul
                     class="navbar-nav list-unstyled d-flex flex-row gap-3 gap-lg-5 justify-content-center flex-wrap align-items-center mb-0 fw-bold text-uppercase text-dark">
                     <li class="nav-item active">
-                        <a href="index.html" class="nav-link">Home</a>
+                        <a href="index.html" class="nav-link" routerLink="register">Home</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle pe-3" role="button" id="pages" data-bs-toggle="dropdown"
