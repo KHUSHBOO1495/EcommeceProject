@@ -82,16 +82,16 @@
                                         </button>
                                     </div>
                                     <div class="col-2 p-2">
-                                        <a *ngIf="isInWishlist(prod._id); else notLike" (click)="addToWishlist(prod._id)">
-                                            <svg  xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="red"
+                                        <a *ngIf="isInWishlist(prod._id); else notLike" (click)="addToWishlist(prod._id)" style="cursor: pointer;">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="red"
                                                 class="bi bi-heart-fill" viewBox="0 0 16 16">
                                                 <path fill-rule="evenodd"
                                                     d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314">
                                                 </path>
                                             </svg>
-                                            </a>
-                                            <ng-template #notLike>
-                                                <a (click)="addToWishlist(prod._id)">
+                                        </a>
+                                        <ng-template #notLike>
+                                            <a (click)="addToWishlist(prod._id)" style="cursor: pointer;">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
                                                     fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
                                                     <path
@@ -99,7 +99,7 @@
                                                     </path>
                                                 </svg>
                                             </a>
-                                            </ng-template>
+                                        </ng-template>
                                     </div>
                                 </div>
                             </div>

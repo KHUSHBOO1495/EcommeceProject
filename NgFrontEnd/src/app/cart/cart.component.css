@@ -1,0 +1,44 @@
+body {
+    background-color: #f5f5f5;
+}
+.cart-container {
+    margin-top: 50px;
+}
+.cart-card {
+    background: #fff;
+    border-radius: 10px;
+    /* padding: 15px; */
+    margin-bottom: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+/* }
+.cart-card { */
+    /* border: 1px solid #ddd; Light border */
+    /* border-radius: 10px; Rounded corners for the card */
+    overflow: hidden; /* Ensure the image stays inside the card */
+    /* margin-bottom: 10px; Spacing between cards */
+}
+.cart-img {
+    width: auto;
+    height: 150px;
+    border-radius: 10px 0px 0px 10px;
+    object-fit: contain;
+}
+.cart-summary {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.btn-remove {
+    color: red;
+    font-size: 14px;
+}
+.btn-remove:hover {
+    color: darkred;
+}
+@media (max-width: 768px) {
+    .cart-img {
+        width: 60px;
+        height: 60px;
+    }
+}

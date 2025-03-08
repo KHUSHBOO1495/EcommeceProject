@@ -1,0 +1,76 @@
+<div class="container cart-container">
+    <div class="row">
+        <!-- Cart Products -->
+        <div class="col-lg-8">
+            <h4 class="mb-3">Shopping Cart</h4>
+
+            <!-- Cart Item -->
+            <div class="row cart-card d-flex align-items-center" *ngFor="let item of cartProduct">
+                <div class="col-2 p-0"><img [src]="item.product_id.image_url[0]" class="cart-img" alt="Product Image"></div>
+                <div class="col flex-grow-1">
+                    <h6>{{item.product_id.product_name}}</h6>
+                    <div class="d-flex align-items-center">
+                        <label for="quantity1" class="me-2">Qty:</label>
+                        <div><input type="number" name="quantity" [(ngModel)]="item.quantity" min="1" max="{{ item.product_id.product_stock }}"
+                            class="form-control border-dark-subtle input-number quantity"
+                            value="1" style="width: 60px;">
+                    </div>
+                        <div class="ps-3" (click)="removeFromCart(item._id)" style="cursor: pointer;">
+                            <svg width="22" height="22">
+                                <use xlink:href="#trash"></use>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-2">
+                    <p class="text-muted">₹{{ item.product_id.product_price }}</p></div>
+            </div>
+
+            <!-- Add more products dynamically -->
+            <!-- <div class="cart-card d-flex align-items-center">
+                <img src="" class="cart-img me-3" alt="Product Image">
+                <div class="flex-grow-1">
+                    <h6>Another Product</h6>
+                    <p class="text-muted">₹2,999</p>
+                    <div class="d-flex align-items-center">
+                        <label for="quantity2" class="me-2">Qty:</label>
+                        <select id="quantity2" class="form-select form-select-sm w-auto">
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                        </select>
+                        <button class="btn btn-link btn-remove ms-3"><i class="fas fa-trash"></i> Remove</button>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+
+        <!-- Order Summary -->
+        <!-- Order Summary -->
+<div class="col-lg-4">
+    <h5 class="mb-3">Order Summary</h5>
+    <div class="cart-summary">
+        <p class="d-flex justify-content-between">
+            <span>Subtotal:</span> 
+            <strong>₹{{ subtotal }}</strong>
+        </p>
+        <p class="d-flex justify-content-between">
+            <span>Total Items:</span> 
+            <strong>{{ totalItem }}</strong>
+        </p>
+        <p class="d-flex justify-content-between">
+            <span>Shipping:</span> 
+            <strong>Free</strong>
+        </p>
+        <hr>
+        <p class="d-flex justify-content-between">
+            <span>Total:</span> 
+            <strong>₹{{ total }}</strong>
+        </p>
+        <button class="btn btn-warning w-100 mt-3">Proceed to Checkout</button>
+    </div>
+</div>
+
+    </div>
+</div>

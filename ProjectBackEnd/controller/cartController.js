@@ -128,13 +128,13 @@ const deleteProductFromCart = async (req, res) => {
         }
         
         const { productId } = req.body;
-
+        
         const cart = await Cart.findById(req.params.id)
         if (!cart) {
             return res.status(404).json({ message: 'Cart not found' });
         }
-
-        const productIndex = cart.products.findIndex(p => p.product_id.toString() === productId);
+        
+        const productIndex = cart.products.findIndex(p => p._id.toString() === productId);
         if (productIndex === -1) {
             return res.status(404).json({ message: 'Product not found in cart' });
         }
