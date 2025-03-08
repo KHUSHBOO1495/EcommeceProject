@@ -1,12 +1,12 @@
 import { NgFor } from '@angular/common';
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ApiCategoryService } from '../api-category.service';
 import { Category } from '../category';
 
 @Component({
   selector: 'app-category',
-  imports: [NgFor],
+  imports: [NgFor, RouterLink],
   templateUrl: './category.component.html',
   styleUrl: './category.component.css'
 })

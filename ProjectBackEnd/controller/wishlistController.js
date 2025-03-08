@@ -6,12 +6,12 @@ const getAllWishlist = async (req, res) => {
     try {
         const wishlist = await Wishlist.find();
         if (!wishlist) {
-            res.status(404).json({ message: "Your wishlist is empty!" });
+            return res.status(404).json({ message: "Your wishlist is empty!" });
         }
-        res.status(200).json(wishlist);
+        return res.status(200).json(wishlist);
 
     } catch (error) {
-        res.status(500).json({ message: "Internal Server Error" });
+        return res.status(500).json({ message: "Internal Server Error" });
     }
 }
 
@@ -26,31 +26,34 @@ const getWishlistById = async (req, res) => {
 
         const wishlist = await Wishlist.findById(req.params.id);
         if (!wishlist) {
-            res.status(404).json({ message: "Your wishlist is empty!" });
+            return res.status(404).json({ message: "Your wishlist is empty!" });
         }
-        res.status(200).json(wishlist);
+        return res.status(200).json(wishlist);
 
     } catch (error) {
-        res.status(500).json({ message: "Internal Server Error" });
+        return res.status(500).json({ message: "Internal Server Error" });
     }
 }
+
 
 const getProductFromWishlist = async (req, res) => {
     try {
         const userId = req.user.user_id;
-
+        
         const user = await User.findById(userId);
-        const wishlist = await Wishlist.findOne(user.wishlist_id).populate('products.product_id')
+        const wishlist = await Wishlist.findOne({ _id: user.wishlist_id }).populate('products.product_id');
 
         if (!wishlist) {
-            res.status(404).json({ message: "Your wishlist is empty!" });
+            return res.status(404).json({ message: "Your wishlist is empty!" });
         }
-        res.status(200).json(wishlist);
+
+        return res.status(200).json(wishlist);
 
     } catch (error) {
-        res.status(500).json({ message: "Internal Server Error" });
+        return res.status(500).json({ message: "Internal Server Error" });
     }
-}
+};
+
 
 const itemToggle = async (req, res) => {
     try {
@@ -58,7 +61,7 @@ const itemToggle = async (req, res) => {
         const userId = req.user.user_id;
         const user = await User.findById(userId)
 
-        let wishlist = await Wishlist.findOne(user.wishlist_id)
+        let wishlist = await Wishlist.findOne({_id: user.wishlist_id})
         if (!wishlist) {
             wishlist = new Wishlist({ products: [] });
             user.wishlist_id = wishlist._id;
@@ -73,19 +76,19 @@ const itemToggle = async (req, res) => {
 
             await wishlist.save();
 
-            res.status(200).json({ message: 'Product inserted in wishlist' });
+            return res.status(200).json({ message: 'Product inserted in wishlist', status: true });
 
-            return res.status(404).json({ message: 'Product inserted in wishlist' });
+            // return res.status(404).json({ message: 'Product inserted in wishlist' });
         } else {
             wishlist.products.splice(productIndex, 1);
             wishlist.updated_at = Date.now();
 
             await wishlist.save();
 
-            res.status(200).json({ message: 'Product removed from wishlist' });
+            return res.status(200).json({ message: 'Product removed from wishlist',status: false });
         }
     } catch (error) {
-        res.status(500).json({ message: "Internal Server Error" });
+        return res.status(500).json({ message: "Internal Server Error" });
     }
 }
 

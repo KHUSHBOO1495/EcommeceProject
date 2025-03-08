@@ -5,7 +5,7 @@ const getAllProduct = async (req, res) => {
     try {
         const product = await Product.find().populate('discount_id').populate('category_id', 'category_name');
         if (!product) {
-            res.status(404).json({ message: "Your product is empty!" });
+            return res.status(404).json({ message: "Your product is empty!" });
         }
 
         const feedbacks = await Feedback.aggregate([
@@ -64,7 +64,7 @@ const getProductById = async (req, res) => {
     try {
         const product = await Product.findById(req.params.id).populate('discount_id').populate('category_id', 'category_name');
         if (!product) {
-            res.status(404).json({ message: "Your product is empty!" });
+            return res.status(404).json({ message: "Your product is empty!" });
         }
 
         let finalPrice = product.product_price;

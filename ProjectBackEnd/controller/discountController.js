@@ -4,7 +4,7 @@ const getAllDiscount = async (req, res) => {
     try {
         const discount = await Discount.find();
         if (!discount) {
-            res.status(404).json({ message: "Discount not found" });
+            return res.status(404).json({ message: "Discount not found" });
         }
         res.status(200).json(discount);
     } catch (error) {

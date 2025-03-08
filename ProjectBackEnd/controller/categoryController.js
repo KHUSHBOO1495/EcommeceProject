@@ -4,7 +4,7 @@ const getAllCategory = async (req, res) => {
     try {
         const categories = await Category.find();
         if (!categories) {
-            res.status(404).json({ message: "Category not found" });
+            return res.status(404).json({ message: "Category not found" });
         }
         res.status(200).json(categories);
     } catch (error) {
@@ -28,7 +28,7 @@ const createCategory = async (req, res) => {
         const { category_name, description, image_url } = req.body;
 
         if (!category_name && !description && !image_url) {
-            res.status(404).json({ message: "Category details are required!" });
+            return res.status(404).json({ message: "Category details are required!" });
         }
 
         const newCategory = await Category.findOne({ category_name });

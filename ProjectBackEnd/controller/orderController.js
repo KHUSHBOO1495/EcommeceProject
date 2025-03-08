@@ -8,7 +8,7 @@ const getAllOrder = async (req, res) => {
     try {
         const order = await Order.find();
         if (!order) {
-            res.status(404).json({ message: "No order placed!" });
+            return res.status(404).json({ message: "No order placed!" });
         }
         res.status(200).json(order);
     } catch (error) {
@@ -72,7 +72,7 @@ const createOrderFromCart = async (req, res) => {
             await user.save();
         }
 
-        const cart = await Cart.findOne(user.cart_id).populate('products.product_id')
+        const cart = await Cart.findOne({_id:user.cart_id}).populate('products.product_id')
         if (!cart || cart.products.length === 0) {
             return res.status(400).json({ message: "Cart is empty" });
         }

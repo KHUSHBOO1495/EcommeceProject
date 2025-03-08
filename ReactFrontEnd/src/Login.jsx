@@ -20,12 +20,11 @@ const LoginForm = () => {
           // Add any other headers here if needed
         }
       })
-      .then(res => {
+      .then(async res => {
         if (!res.ok) {  // If the status code is not OK (not in 200-299 range)
-          return res.json().then(error => {
-            // Reject with the error message from the response body
-            throw new Error(error.message || 'An error occurred');
-          });
+          const error = await res.json();
+          // Reject with the error message from the response body
+          throw new Error(error.message || 'An error occurred');
         }
         return res.json(); // If status is OK, parse the response JSON
       }) // Parse the response as JSON

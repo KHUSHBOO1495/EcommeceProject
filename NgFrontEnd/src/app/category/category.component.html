@@ -23,7 +23,7 @@
 
                 <div class="category-carousel swiper">
                     <div class="swiper-wrapper">
-                        <a *ngFor="let cat of data" class="nav-link swiper-slide text-center">
+                        <a *ngFor="let cat of data" [routerLink]="['/product', cat._id]" class="nav-link swiper-slide text-center">
                             <div (click)="getProductByCat(cat._id)">
                             <img src={{cat.image_url}} class="rounded-circle" alt="Category Thumbnail" height="165">
                             <h4 class="fs-6 mt-3 fw-normal category-title">{{cat.category_name}}</h4></div>

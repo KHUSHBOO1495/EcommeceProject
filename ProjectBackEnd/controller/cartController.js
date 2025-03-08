@@ -5,7 +5,7 @@ const getAllCart = async (req, res) => {
     try {
         const cart = await Cart.find();
         if (!cart) {
-            res.status(404).json({ message: "Your cart is empty!" });
+            return res.status(404).json({ message: "Your cart is empty!" });
         }
         res.status(200).json(cart);
 
@@ -25,7 +25,7 @@ const getCartById = async (req, res) => {
 
         const cart = await Cart.findById(req.params.id);
         if (!cart) {
-            res.status(404).json({ message: "Your cart is empty!" });
+            return res.status(404).json({ message: "Your cart is empty!" });
         }
         res.status(200).json(cart);
 
@@ -39,10 +39,10 @@ const getProductFromCart = async (req, res) => {
         const userId = req.user.user_id;
 
         const user = await User.findById(userId);
-        const cart = await Cart.findOne(user.cart_id).populate('products.product_id')
+        const cart = await Cart.findOne({_id:user.cart_id}).populate('products.product_id')
 
         if (!cart) {
-            res.status(404).json({ message: "Your cart is empty!" });
+            return res.status(404).json({ message: "Your cart is empty!" });
         }
         res.status(200).json(cart);
 
@@ -57,7 +57,7 @@ const insertProductInCart = async (req, res) => {
         const userId = req.user.user_id;
         const user = await User.findById(userId)
         
-        let cart = await Cart.findOne(user.cart_id)
+        let cart = await Cart.findOne({_id:user.cart_id})
         if (!cart) {
             cart = new Cart({ products: [], quantity: 0 });
             user.cart_id = cart._id;

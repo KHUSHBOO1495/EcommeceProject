@@ -5,7 +5,7 @@ const getAllReturnProduct = async (req, res) => {
     try {
         const returnProduct = await ReturnProduct.find();
         if (!returnProduct) {
-            res.status(404).json({ message: "No return available!" });
+            return res.status(404).json({ message: "No return available!" });
         }
         res.status(200).json(returnProduct);
 
