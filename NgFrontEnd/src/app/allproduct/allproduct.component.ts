@@ -1,7 +1,7 @@
 import { NgFor, NgIf } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import Swal from 'sweetalert2';
 import { CartService } from '../cart.service';
 import { Product } from '../product';
@@ -10,7 +10,7 @@ import { WishlistService } from '../wishlist.service';
 
 @Component({
   selector: 'app-allproduct',
-  imports: [NgFor, NgIf,FormsModule, RouterLink],
+  imports: [NgFor, NgIf,FormsModule],
   templateUrl: './allproduct.component.html',
   styleUrl: './allproduct.component.css'
 })

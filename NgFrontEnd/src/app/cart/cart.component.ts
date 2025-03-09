@@ -11,12 +11,12 @@ import { CartService } from '../cart.service';
 })
 export class CartComponent {
   cartId = ''
-  cartProduct:any[] = [];
+  cartProduct: any[] = [];
   subtotal: number = 0;
   total: number = 0;
-  totalItem:number =0;
+  totalItem: number = 0;
 
-  constructor(private _apiCart:CartService){}
+  constructor(private _apiCart: CartService) { }
 
   ngOnInit() {
     this._apiCart.getAll().subscribe((res: any) => {
@@ -32,7 +32,7 @@ export class CartComponent {
       this.subtotal = this.cartProduct.reduce((sum, item) => {
         return sum + (item.product_id.product_price * item.quantity);
       }, 0);
-  
+
       this.total = this.subtotal; // Modify if you have discounts
     } else {
       this.subtotal = 0;
@@ -41,16 +41,30 @@ export class CartComponent {
   }
 
   removeFromCart(productId: string) {
-    this._apiCart.delete(this.cartId,productId).subscribe(
-      (res: any) => {  
+    this._apiCart.delete(this.cartId, productId).subscribe(
+      (res: any) => {
         this.cartProduct = this.cartProduct.filter(item => item._id !== productId);
         this.totalItem = this.cartProduct.reduce((sum, item) => sum + item.quantity, 0);
-        
         this.calculateTotal();
       },
       (err) => {
         console.error("Error removing product:", err);
       }
     );
+  }
+
+  updateCart(productId: string, quantity: number, stock: number) {
+    if (quantity < 1 || quantity > 10 || quantity > stock) {
+      return;
+    }
+    const itemIndex = this.cartProduct.findIndex(item => item._id === productId);
+    if (itemIndex !== -1) {
+      this.cartProduct[itemIndex].quantity = quantity;
+    }
+
+    this._apiCart.update(this.cartId, productId, quantity).subscribe((res: any) => {
+      this.totalItem = this.cartProduct.reduce((sum, item) => sum + item.quantity, 0);
+      this.calculateTotal();
+    })
   }
 }

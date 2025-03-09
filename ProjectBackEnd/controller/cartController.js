@@ -56,14 +56,13 @@ const insertProductInCart = async (req, res) => {
         const { productId, quantity } = req.body;
         const userId = req.user.user_id;
         const user = await User.findById(userId)
-        
         let cart = await Cart.findOne({_id:user.cart_id})
         if (!cart) {
             cart = new Cart({ products: [], quantity: 0 });
             user.cart_id = cart._id;
             await user.save();
         }
-
+        
         const productAvailable = cart.products.findIndex(item => item.product_id.toString() === productId);
         if (productAvailable >= 0) {
             cart.products[productAvailable].quantity += quantity;
@@ -74,9 +73,9 @@ const insertProductInCart = async (req, res) => {
         cart.quantity = cart.products.reduce((total, product) => total + product.quantity, 0);
         await cart.save();
 
-        res.status(200).json({ message: 'Product inserted in cart' });
+        return res.status(200).json({ message: 'Product inserted in cart' });
     } catch (error) {
-        res.status(500).json({ message: "Internal Server Error" });
+        return res.status(500).json({ message: "Internal Server Error" });
     }
 }
 
@@ -88,16 +87,16 @@ const updateCartProduct = async (req, res) => {
         if(user.cart_id.toString() !== req.params.id){
             return res.status(403).json({ message: "Access denied. You can't access this cart." });
         }
-
+        
         const { productId, quantity } = req.body;
         const { id } = req.params;
-
+        
         const cart = await Cart.findById(req.params.id)
         if (!cart) {
             return res.status(404).json({ message: 'Cart not found' });
         }
-
-        const productIndex = cart.products.findIndex(item => item.product_id.toString() === productId);
+        
+        const productIndex = cart.products.findIndex(p => p._id.toString() === productId);
         if (productIndex === -1) {
             return res.status(404).json({ message: 'Product not found in cart' });
         }

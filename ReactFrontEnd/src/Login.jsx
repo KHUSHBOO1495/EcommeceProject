@@ -29,7 +29,6 @@ const LoginForm = () => {
         return res.json(); // If status is OK, parse the response JSON
       }) // Parse the response as JSON
       .then(res => {
-        console.log(res)
         if (res.error) { // Check if there is an error in the response
           // Handle the error (display an alert)
           Swal.fire({

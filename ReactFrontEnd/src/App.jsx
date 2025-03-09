@@ -3,6 +3,8 @@ import Home from './Home'
 import Layout from "./Layout"
 import LoginForm from './Login'
 import RegistrationForm from './Registration'
+import AllProduct from './components/AllProduct'
+import Cart from './components/Cart'
 
 function App() {
 
@@ -12,10 +14,13 @@ function App() {
         <Routes>
           <Route path='/' element={<Layout />}>
             <Route index element={<Home />} />
+            <Route path='/product' element={<AllProduct/>} />
+            <Route path='/product/:id' element={<AllProduct/>} />
+            <Route path='/cart' element={<Cart/>} />
           </Route>
           <Route path='/register' element={<RegistrationForm />}></Route>
           <Route path='/login' element={<LoginForm />}></Route>
-
+          <Route path='*' element={<h1 className='text-secondary'>404 Not Found</h1>}/>
         </Routes>
       </BrowserRouter>
     </>

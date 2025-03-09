@@ -21,4 +21,8 @@ export class CartService {
   delete(cartId:any, productId:any){
     return this._http.delete(this.apiUrl+"/"+cartId, {body: { productId },headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('token')}`)});
   }
+
+  update(cartId:any, productId:any, quantity:any){
+    return this._http.patch(this.apiUrl+"/"+cartId, { productId, quantity }, {headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('token')}`)});
+  }
 }

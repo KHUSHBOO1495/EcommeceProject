@@ -31,6 +31,20 @@ const getUserById = async(req,res)=>{
     }
 }
 
+//GET user by id
+const getUser = async(req,res)=>{
+    try{
+        const uId = req.user.user_id;
+        const users = await User.findById(uId);
+        if(!users){
+            return res.status(404).json({ message: "User not found!" });
+        }
+        res.json(users)
+    }catch(error){
+        res.status(500).json({ message: "Internal Server Error", error: error.message });
+    }
+}
+
 //PATCH user
 const updateUser = async(req,res)=>{
     try{
@@ -81,4 +95,4 @@ const deleteUser = async(req,res)=>{
     }
 }
 
-module.exports = { getAllUser, getUserById, updateUser, deleteUser };
+module.exports = { getAllUser, getUser,getUserById, updateUser, deleteUser };
