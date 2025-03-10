@@ -53,32 +53,32 @@ const AllProduct = () => {
           "Authorization": "Bearer " + token
         }
       })
-      .then(res => res.json())
-      .then(res => {
-        setWishlistProductIds((prev) =>
-          res.status ? [...prev, id] : prev.filter((pid) => pid !== id)
-        );
-        Swal.fire({
-          title: res.message,
-          text: "Your wishlist has been updated successfully.",
-          icon: res.status ? "success" : "info",
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 2000,
-          background: "#f9f9f9",
-          color: "#333",
-          iconColor: res.status ? "#4CAF50" : "#FFA500",
-        });
-      })
-    // await axios.post("/api/cart", { productId: id, quantity });
+        .then(res => res.json())
+        .then(res => {
+          setWishlistProductIds((prev) =>
+            res.status ? [...prev, id] : prev.filter((pid) => pid !== id)
+          );
+          Swal.fire({
+            title: res.message,
+            text: "Your wishlist has been updated successfully.",
+            icon: res.status ? "success" : "info",
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 2000,
+            background: "#f9f9f9",
+            color: "#333",
+            iconColor: res.status ? "#4CAF50" : "#FFA500",
+          });
+        })
+      // await axios.post("/api/cart", { productId: id, quantity });
 
-  } catch (error) {
-    console.error("Error updating wishlist", error);
-  }
+    } catch (error) {
+      console.error("Error updating wishlist", error);
+    }
 
-      
-    
+
+
   };
 
   const getAllProducts = () => {
@@ -170,12 +170,36 @@ const AllProduct = () => {
                   <div className="d-flex flex-column text-center">
                     <h3 className="fs-6 fw-normal">{product.product_name}</h3>
                     <div>
-                      <span className="rating">⭐⭐⭐⭐☆</span>
-                      <span>(222)</span>
+                      <span className="rating">
+                        {[1, 2, 3, 4, 5].map(star => {
+                          // Check if the star is full, half or empty based on the average rating
+                          if (star <= product.average_rating) {
+                            return (
+                              <svg key={star} width="18" height="18" className="text-warning">
+                                <use xlinkHref="#star-full"></use>
+                              </svg>
+                            );
+                          } else if (star - 1 < product.average_rating) {
+                            return (
+                              <svg key={star} width="18" height="18" className="text-warning">
+                                <use xlinkHref="#star-half"></use>
+                              </svg>
+                            );
+                          } else {
+                            return (
+                              <svg key={star} width="18" height="18" className="text-muted">
+                                <use xlinkHref="#star-empty"></use>
+                              </svg>
+                            );
+                          }
+                        })}
+                      </span>
+                      <span>({product.total_ratings})</span>
+
                     </div>
                     <div className="d-flex justify-content-center align-items-center gap-2">
-                      <del>{product.original_price}</del>
-                      <span className="text-dark fw-semibold">{product.final_price}</span>
+                      <del>₹{product.original_price}</del>
+                      <span className="text-dark fw-semibold">₹{product.final_price}</span>
                       <span className="badge border border-dark-subtle rounded-0 fw-normal px-1 fs-7 lh-1 text-body-tertiary">
                         10% OFF
                       </span>

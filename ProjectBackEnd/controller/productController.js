@@ -48,8 +48,10 @@ const getAllProduct = async (req, res) => {
                 original_price: product.product_price,
                 discount_value: discountValue,
                 final_price: finalPrice,
+                product_stock: product.product_stock,
                 average_rating: feedback ? feedback.averageRating.toFixed(1) : "0.0",
-                total_ratings: feedback ? feedback.totalRatings : 0
+                total_ratings: feedback ? feedback.totalRatings : 0,
+                created_at: product.created_at
             };
         });
 

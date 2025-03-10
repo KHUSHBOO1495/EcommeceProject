@@ -149,19 +149,23 @@ body {
 }
 
 .discount1{
-  background: url('images/banner-ad-1.jpg') no-repeat; background-size: cover;
+  background: url('images/Sale_Banner.jpg') no-repeat; background-size: cover;
+}
+
+.discount1 a{
+  margin-top: 235px;
 }
 
 .discount2{
-  background:url('images/banner-ad-2.jpg') no-repeat;background-size: cover
+  background:url('images/Sale_Banner2.jpg') no-repeat;background-size: cover
 }
 
 .discount3{
-  background:url('images/banner-ad-3.jpg') no-repeat;background-size: cover
+  background:url('images/Sale_Banner3.jpg') no-repeat;background-size: cover
 }
 
 .discount4{
-  background: url('images/banner-newsletter.jpg') no-repeat; background-size: cover;
+  background: url('images/Sale_Banner4.jpg') no-repeat; background-size: cover;
 }
 
 body {
@@ -204,7 +208,7 @@ h1,h2,h3,h4,h5,h6 {
   --bs-breadcrumb-item-active-color: var(--bs-primary);
 }
 .dropdown-menu {
-  --bs-dropdown-link-active-bg: var(--bs-primary);
+  --bs-dropdown-link-active-bg: #c695b0;
 }
 .nav-pills .nav-link {
   --bs-nav-pills-link-active-color: #111;
