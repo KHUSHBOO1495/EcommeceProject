@@ -64,7 +64,10 @@ const getAllProduct = async (req, res) => {
 
 const getProductById = async (req, res) => {
     try {
-        const product = await Product.findById(req.params.id).populate('discount_id').populate('category_id', 'category_name');
+        const product = await Product.findById(req.params.id)
+            .populate('discount_id')
+            .populate('category_id', 'category_name');
+        
         if (!product) {
             return res.status(404).json({ message: "Your product is empty!" });
         }
@@ -86,17 +89,40 @@ const getProductById = async (req, res) => {
                 finalPrice = Math.max(product.product_price - discountValue, 0); // Ensure price doesn't go negative
             }
         }
+        
+        // Aggregate feedback data
+        const feedback = await Feedback.aggregate([
+            {
+                $match: {
+                    product_id: product._id
+                }
+            },
+            {
+                $group: {
+                    _id: "$product_id",
+                    averageRating: { $avg: "$rating" },
+                    totalRatings: { $sum: 1 }
+                }
+            }
+        ]);
+
+        // Check if feedback array is empty
+        const averageRating = feedback.length > 0 ? feedback[0].averageRating.toFixed(1) : "0.0";
+        const totalRatings = feedback.length > 0 ? feedback[0].totalRatings : 0;
 
         res.status(200).json({
             product,
             original_price: product.product_price,
             discount_value: discountValue,
-            final_price: finalPrice
+            final_price: finalPrice,
+            average_rating: averageRating,
+            total_ratings: totalRatings,
         });
     } catch (error) {
         res.status(500).json({ message: "Internal Server Error" });
     }
-}
+};
+
 
 const createProduct = async (req, res) => {
     try {
@@ -124,7 +150,7 @@ const createProduct = async (req, res) => {
 
         const newProduct = new Product(newProductData);
         await newProduct.save();
-            
+
         res.status(201).json({ message: 'Product created successfully', product: newProduct });
     } catch (error) {
         res.status(500).json({ message: "Internal Server Error" });

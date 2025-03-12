@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Cart() {
     const cartUrl = "http://localhost:3000/cart";
@@ -7,8 +7,12 @@ function Cart() {
     const [cart, setCart] = useState([]);
     const [id, setId] = useState('');
     const [cartEmpty, setCartEmpty] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
+        if (!token || token === 'undefined') {
+            navigate('/login')
+        }
         getAllCartProducts();
     }, []);
 
@@ -94,7 +98,9 @@ function Cart() {
         cart.map((product, index) => (
             <div className="row cart-card d-flex align-items-center" key={index}>
                 <div className="col-2 p-0">
+                    <Link to={"/product/"+product.product_id._id}>
                     <img src={product.product_id.image_url[0]} className="cart-img" alt="Product" />
+                    </Link>
                 </div>
 
                 <div className="col flex-grow-1">

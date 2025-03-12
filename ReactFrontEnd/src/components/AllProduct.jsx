@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 
 const AllProduct = () => {
@@ -12,8 +12,12 @@ const AllProduct = () => {
   const [quantities, setQuantities] = useState({});
   const [wishlistProductIds, setWishlistProductIds] = useState([]);
   const { id: categoryId } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
+    if (!token || token === 'undefined') {
+      navigate('/login')
+    }
     loadWishlist();
     categoryId ? getProductsByCategory(categoryId) : getAllProducts();
 
@@ -163,9 +167,9 @@ const AllProduct = () => {
               <div className="col" key={index}>
                 <div className="product-item">
                   <figure>
-                    <a href="/" title="Product Title">
+                    <Link to={"/product/"+product._id} title="Product Title">
                       <img src={product.image_url[0]} alt="Product Thumbnail" className="tab-image" />
-                    </a>
+                    </Link>
                   </figure>
                   <div className="d-flex flex-column text-center">
                     <h3 className="fs-6 fw-normal">{product.product_name}</h3>

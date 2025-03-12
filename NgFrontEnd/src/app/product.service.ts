@@ -12,4 +12,8 @@ export class ProductService {
   getAll(){
     return this._http.get(this.apiUrl, {headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('token')}`)});
   }
+
+  getProductById(id:any){
+    return this._http.get(this.apiUrl+"/"+id, {headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('token')}`)});
+  }
 }

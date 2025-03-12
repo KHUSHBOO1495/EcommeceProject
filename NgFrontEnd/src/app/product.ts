@@ -4,6 +4,7 @@ export class Product {
     image_url:string[] = [];
     category_name:string='';
     category_id:string ='';
+    product_stock:number = 0;
     original_price:number=0;
     discount_value:number = 0;
     final_price:number = 0;

@@ -5,10 +5,27 @@
             <h4>Filters</h4>
             <!-- Add filter options here -->
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="sizeFilter">
+                <!-- <input class="form-check-input" type="checkbox" value="" id="sizeFilter">
                 <label class="form-check-label" for="sizeFilter">
                     Size Filter
-                </label>
+                </label> -->
+                <div class="form-group mt-3">
+                    <label class="fw-bold">Price Range</label>
+                    <input type="range" class="form-range" [min]="minPrice" [max]="maxPriceLimit"
+                        [(ngModel)]="maxPrice" (change)="applyFilters()">
+                    <span class="text-primary">Up to ₹{{ maxPrice }}</span>
+                </div>
+
+                <div class="form-group mt-3">
+                    <label class="fw-bold">Sort By</label>
+                    <select class="form-control border-primary" [(ngModel)]="sortBy" (change)="applySorting()">
+                        <option value="none">None</option>
+                        <option value="price_low">Price: Low to High</option>
+                        <option value="price_high">Price: High to Low</option>
+                        <option value="rating">Rating</option>
+                        <option value="stock">Stock</option>
+                    </select>
+                </div>
             </div>
             <!-- Add more filters here -->
         </div>
@@ -31,48 +48,53 @@
             <div
                 class="product-grid row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-3 row-cols-xl-4 row-cols-xxl-5">
 
-                <div class="col" *ngFor="let prod of products">
+                <div class="col" *ngFor="let prod of filteredProducts">
                     <div class="product-item">
                         <figure>
-                            <a href="" title="Product Title">
+                            <a [routerLink]="['/product', prod._id]" title="Product Title">
                                 <img src={{prod.image_url[0]}} alt="Product Thumbnail" class="tab-image">
                             </a>
                         </figure>
                         <div class="d-flex flex-column text-center">
                             <h3 class="fs-6 fw-normal">{{prod.product_name}}</h3>
                             <div>
-                                <span class="rating">
-                                    <svg width="18" height="18" class="text-warning">
-                                        <use xlink:href="#star-full"></use>
-                                    </svg>
-                                    <svg width="18" height="18" class="text-warning">
-                                        <use xlink:href="#star-full"></use>
-                                    </svg>
-                                    <svg width="18" height="18" class="text-warning">
-                                        <use xlink:href="#star-full"></use>
-                                    </svg>
-                                    <svg width="18" height="18" class="text-warning">
-                                        <use xlink:href="#star-full"></use>
-                                    </svg>
-                                    <svg width="18" height="18" class="text-warning">
-                                        <use xlink:href="#star-half"></use>
-                                    </svg>
+                                <span class="rating" *ngFor="let star of [1, 2, 3, 4, 5]">
+                                    <ng-container [ngSwitch]="true">
+                                        <!-- Full Star -->
+                                        <svg *ngSwitchCase="star <= prod.average_rating" width="18" height="18"
+                                            class="text-warning">
+                                            <use xlink:href="#star-full"></use>
+                                        </svg>
+
+                                        <!-- Half Star -->
+                                        <svg *ngSwitchCase="star - 1 < prod.average_rating && star > prod.average_rating"
+                                            width="18" height="18" class="text-warning">
+                                            <use xlink:href="#star-half"></use>
+                                        </svg>
+
+                                        <!-- Empty Star -->
+                                        <svg *ngSwitchDefault width="18" height="18" class="text-muted">
+                                            <use xlink:href="#star-empty"></use>
+                                        </svg>
+                                    </ng-container>
                                 </span>
-                                <span>(222)</span>
+
+
+                                <span>({{prod.total_ratings}})</span>
                             </div>
                             <div class="d-flex justify-content-center align-items-center gap-2">
-                                <del>{{prod.original_price}}</del>
-                                <span class="text-dark fw-semibold">{{prod.final_price}}</span>
+                                <del>₹{{prod.original_price}}</del>
+                                <span class="text-dark fw-semibold">₹{{prod.final_price}}</span>
                                 <span
                                     class="badge border border-dark-subtle rounded-0 fw-normal px-1 fs-7 lh-1 text-body-tertiary">10%
                                     OFF</span>
                             </div>
                             <div class="button-area p-3 pt-0">
                                 <div class="row g-1 mt-2">
-                                    <div class="col-3"><input type="number" name="quantity"
+                                    <!-- <div class="col-3"><input type="number" name="quantity"
                                             class="form-control border-dark-subtle input-number quantity"
                                             [(ngModel)]="quantity" value="1">
-                                    </div>
+                                    </div> -->
                                     <div class="col">
                                         <button class="btn btn-primary rounded-1 p-2 fs-7 btn-cart"
                                             (click)="addToCart(prod._id)">
@@ -82,7 +104,8 @@
                                         </button>
                                     </div>
                                     <div class="col-2 p-2">
-                                        <a *ngIf="isInWishlist(prod._id); else notLike" (click)="addToWishlist(prod._id)" style="cursor: pointer;">
+                                        <a *ngIf="isInWishlist(prod._id); else notLike"
+                                            (click)="addToWishlist(prod._id)" style="cursor: pointer;">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="red"
                                                 class="bi bi-heart-fill" viewBox="0 0 16 16">
                                                 <path fill-rule="evenodd"

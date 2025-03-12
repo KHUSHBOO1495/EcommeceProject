@@ -21,7 +21,7 @@ function GetAllCategory() {
 
     const formatedData = data.map(d => {
         return (
-            <Link to={"/product/"+d._id} className="nav-link swiper-slide text-center" style={{ cursor: "pointer" }}>
+            <Link to={"/category/"+d._id} className="nav-link swiper-slide text-center" style={{ cursor: "pointer" }}>
                 <img src={d.image_url} className="rounded-circle" alt="Category Thumbnail" height={165} />
                 <h4 className="fs-6 mt-3 fw-normal category-title">{d.category_name}</h4>
             </Link>

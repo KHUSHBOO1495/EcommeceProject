@@ -12,13 +12,15 @@ import { Category } from '../category';
 })
 export class CategoryComponent {
   data:Category[] =[];
-  constructor(private _api:ApiCategoryService,private _router:Router){
+  constructor(private _api:ApiCategoryService,private _router:Router){  }
+  
+  ngOnInit(){
     this._api.getAll().subscribe((res:any)=>{
       this.data=res;
     })
   }
 
   getProductByCat(id:any){
-    this._router.navigate(['product',id])
+    this._router.navigate(['category',id])
   }
 }

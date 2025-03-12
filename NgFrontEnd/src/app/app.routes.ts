@@ -4,13 +4,17 @@ import { authGuard } from './auth.guard';
 import { CartComponent } from './cart/cart.component';
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
+import { ProductDetailComponent } from './product-detail/product-detail.component';
 import { RegistrationComponent } from './registration/registration.component';
+import { WishlistComponent } from './wishlist/wishlist.component';
 
 export const routes: Routes = [
     {path:'login', component:LoginComponent},
     {path:'register', component:RegistrationComponent},
     {path:'',component:HomeComponent, canActivate:[authGuard]},
     {path:'product', component:AllproductComponent,canActivate:[authGuard]},
-    {path:'product/:id', component:AllproductComponent,canActivate:[authGuard]},
-    {path:'cart', component:CartComponent,canActivate:[authGuard]}
+    {path:'product/:id', component:ProductDetailComponent,canActivate:[authGuard]},
+    {path:'category/:id', component:AllproductComponent,canActivate:[authGuard]},
+    {path:'cart', component:CartComponent,canActivate:[authGuard]},
+    {path:'wishlist', component:WishlistComponent,canActivate:[authGuard]}
 ];

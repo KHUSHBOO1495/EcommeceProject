@@ -35,7 +35,7 @@ function Layout() {
             <div className="offcanvas offcanvas-start" tabIndex="-1" id="offcanvasNavbar">
 
                 <div className="offcanvas-header justify-content-between">
-                    <h4 className="fw-normal text-uppercase fs-6">Menu</h4>
+                    <h4 className="fw-normal text-uppercase fs-6">Categories</h4>
                     <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
 
@@ -45,7 +45,7 @@ function Layout() {
                         {data.map((category) => {
                             return (
                                 <li className="nav-item border-dashed active">
-                                    <Link to={"/product/"+category._id} className="nav-link d-flex align-items-center gap-3 text-dark p-2" >
+                                    <Link to={"/category/"+category._id} className="nav-link d-flex align-items-center gap-3 text-dark p-2" >
                                         <span data-bs-dismiss="offcanvas">{category.category_name}</span>
                                     </Link>
                                 </li>
@@ -98,23 +98,23 @@ function Layout() {
                         <div className="col-lg-4">
                             <ul className="navbar-nav list-unstyled d-flex flex-row gap-3 gap-lg-5 justify-content-center flex-wrap align-items-center mb-0 fw-bold text-uppercase text-dark">
                                 <li className="nav-item active">
-                                    <Link className="nav-link" to="/">Home</Link>
+                                    <Link to="/" className="nav-link">Home</Link>
                                 </li>
                                 <li className="nav-item dropdown">
                                     <a className="nav-link dropdown-toggle pe-3" role="button" id="pages" data-bs-toggle="dropdown" aria-expanded="false">Pages</a>
                                     <ul className="dropdown-menu border-0 p-3 rounded-0 shadow" aria-labelledby="pages">
-                                        <li><a href="index.html" className="dropdown-item">About Us </a></li>
+                                        <li><Link to="/" className="dropdown-item">About Us </Link></li>
                                         <li><Link to="/product" className="dropdown-item">Shop </Link></li>
-                                        <li><a href="index.html" className="dropdown-item">Single Product </a></li>
-                                        <li><a href="index.html" className="dropdown-item">Cart </a></li>
-                                        <li><a href="index.html" className="dropdown-item">Checkout </a></li>
-                                        <li><a href="index.html" className="dropdown-item">Blog </a></li>
-                                        <li><a href="index.html" className="dropdown-item">Single Post </a></li>
-                                        <li><a href="index.html" className="dropdown-item">Styles </a></li>
-                                        <li><a href="index.html" className="dropdown-item">Contact </a></li>
-                                        <li><a href="index.html" className="dropdown-item">Thank You </a></li>
-                                        <li><a href="index.html" className="dropdown-item">My Account </a></li>
-                                        <li><a href="index.html" className="dropdown-item">404 Error </a></li>
+                                        <li><Link to="/" className="dropdown-item">Single Product </Link></li>
+                                        <li><Link to="/" className="dropdown-item">Cart </Link></li>
+                                        <li><Link to="/" className="dropdown-item">Checkout </Link></li>
+                                        <li><Link to="/" className="dropdown-item">Blog </Link></li>
+                                        <li><Link to="/" className="dropdown-item">Single Post </Link></li>
+                                        <li><Link to="/" className="dropdown-item">Styles </Link></li>
+                                        <li><Link to="/" className="dropdown-item">Contact </Link></li>
+                                        <li><Link to="/" className="dropdown-item">Thank You </Link></li>
+                                        <li><Link to="/" className="dropdown-item">My Account </Link></li>
+                                        <li><Link to="/" className="dropdown-item">404 Error </Link></li>
                                     </ul>
                                 </li>
                             </ul>
@@ -123,7 +123,7 @@ function Layout() {
                         <div className="col-sm-8 col-lg-2 d-flex gap-5 align-items-center justify-content-center justify-content-sm-end">
                             <ul className="d-flex justify-content-end list-unstyled m-0">
                                 <li>
-                                    <a href="#" className="p-2 mx-1" data-bs-toggle="offcanvas" data-bs-target="#offcanvasUser" aria-controls="offcanvasUser">
+                                    <a className="p-2 mx-1" data-bs-toggle="offcanvas" data-bs-target="#offcanvasUser" aria-controls="offcanvasUser"  style={{ cursor: "pointer" }}>
                                         <svg width="24" height="24"><use xlinkHref="#user"></use></svg>
                                     </a>
                                 </li>

@@ -36,13 +36,13 @@ const { createRazorpayOrder, verifyRazorpayPayment, createCODPayment } = require
 const router = express.Router();
 
 //Create Razorpay Order
-router.post("/razorpay", authenticate, createRazorpayOrder);
+router.post("/razorpay", authenticate, authorize("createRazorpayOrder"), createRazorpayOrder);
 
 //Verify Razorpay Payment
-router.post("/verify-razorpay", authenticate, verifyRazorpayPayment);
+router.post("/verify-razorpay", authenticate, authorize("verifyRazorpayPayment"), verifyRazorpayPayment);
 
 //Create COD Payment
-router.post("/cod", authenticate, createCODPayment);
+router.post("/cod", authenticate, authorize("createCODPayment"), createCODPayment);
 
 module.exports = router;
 

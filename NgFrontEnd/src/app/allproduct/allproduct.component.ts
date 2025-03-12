@@ -1,7 +1,7 @@
-import { NgFor, NgIf } from '@angular/common';
+import { NgFor, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import Swal from 'sweetalert2';
 import { CartService } from '../cart.service';
 import { Product } from '../product';
@@ -10,15 +10,22 @@ import { WishlistService } from '../wishlist.service';
 
 @Component({
   selector: 'app-allproduct',
-  imports: [NgFor, NgIf,FormsModule],
+  imports: [NgFor, NgIf,FormsModule, NgSwitch, NgSwitchCase, NgSwitchDefault, RouterLink],
   templateUrl: './allproduct.component.html',
   styleUrl: './allproduct.component.css'
 })
 export class AllproductComponent {
   products: Product[] = [];
   wishlistProductIds: string[] = [];
+  filteredProducts: Product[] = [];
   category_id = null;
   quantity: number = 1;
+
+  selectedCategory: string = 'all';
+  minPrice :number=2000;
+  maxPrice: number = 100000;
+  maxPriceLimit: number = 100000;
+  sortBy: string = 'none';
 
   constructor(private _activeRoute: ActivatedRoute, private _apiProduct: ProductService, private _apiCart: CartService, private _apiWishlist: WishlistService) { }
 
@@ -106,13 +113,44 @@ export class AllproductComponent {
   getAllProduct() {
     this._apiProduct.getAll().subscribe((res: any) => {
       this.products = res;
+      this.filteredProducts = res;
     })
   }
 
   getProductsByCategory(categoryId: string): void {
     this._apiProduct.getAll().subscribe((res: any) => {
       this.products = res;
-      this.products = this.products.filter(product => product.category_id === categoryId)
+      this.filteredProducts = this.products.filter(product => product.category_id === categoryId)
     })
+  }
+
+  applyFilters(): void {
+    this.filteredProducts = this.products.filter(product => 
+      (this.selectedCategory === 'all' || product.category_id === this.selectedCategory) &&
+      product.final_price >= this.minPrice &&
+      product.final_price <= this.maxPrice
+    );
+  
+    this.applySorting();
+  }
+
+  applySorting(): void {
+    switch (this.sortBy) {
+      case 'none':
+        this.filteredProducts = [...this.products];
+        break;
+      case 'price_low':
+        this.filteredProducts.sort((a, b) => a.final_price - b.final_price);
+        break;
+      case 'price_high':
+        this.filteredProducts.sort((a, b) => b.final_price - a.final_price);
+        break;
+      case 'rating':
+        this.filteredProducts.sort((a, b) => b.average_rating - a.average_rating);
+        break;
+      case 'stock':
+        this.filteredProducts.sort((a, b) => b.product_stock - a.product_stock);
+        break;
+    }
   }
 }

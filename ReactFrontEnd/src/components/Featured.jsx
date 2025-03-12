@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 
 function Featured() {
@@ -27,7 +28,7 @@ function Featured() {
         })
             .then(res => res.json())
             .then(res => {
-                const filteredProducts = res.filter(p => p.product_stock > 2 && p.average_rating >= 4.5);
+                const filteredProducts = res.filter(p => p.product_stock > 2 && p.average_rating >= 4.5).slice(0, 10);
                 setProduct(filteredProducts);
             })
             .catch(error => console.error('Error fetching products:', error));
@@ -136,9 +137,9 @@ function Featured() {
                 return(
                     <div className="product-item swiper-slide" key={index}>
                 <figure>
-                    <a href="/" title="Product Title">
+                    <Link to={"/product/"+product._id} title="Product Title">
                         <img src={product.image_url[0]} alt="Product Thumbnail" className="tab-image" />
-                    </a>
+                    </Link>
                 </figure>
                 <div className="d-flex flex-column text-center">
                     <h3 className="fs-6 fw-normal">{product.product_name}</h3>

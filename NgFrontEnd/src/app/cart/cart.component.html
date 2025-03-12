@@ -3,8 +3,20 @@
         <div class="col-lg-8">
             <h4 class="mb-3">Shopping Cart</h4>
 
+            <div *ngIf="cartProduct.length === 0" class="text-center p-5">
+                <svg  width="150" height="150">
+                    <use xlink:href="#cart"></use>
+                </svg>
+                <h5 class="mt-3 text-muted">Your cart is empty!</h5>
+                <p>Looks like you haven't added anything yet.</p>
+                <a routerLink="/product" class="btn btn-primary mt-2">Go to Shop</a>
+            </div>
+
             <div class="row cart-card d-flex align-items-center" *ngFor="let item of cartProduct">
-                <div class="col-2 p-0"><img [src]="item.product_id.image_url[0]" class="cart-img" alt="Product Image">
+                <div class="col-2 p-0">
+                    <a [routerLink]="['/product', item.product_id._id]">
+                        <img [src]="item.product_id.image_url[0]" class="cart-img" alt="Product Image">
+                    </a>
                 </div>
                 <div class="col flex-grow-1">
                     <h6 class="mb-3">{{item.product_id.product_name}}</h6>
@@ -75,7 +87,20 @@
                     <span>Total:</span>
                     <strong>₹{{ total }}</strong>
                 </p>
-                <button class="btn btn-primary w-100 mt-3">Proceed to Checkout</button>
+                <button *ngIf="!showAddressForm" class="btn btn-primary w-100 mt-3" (click)="toggleAddressForm()">
+                    Proceed to Checkout
+                </button>
+
+                <form *ngIf="showAddressForm" (ngSubmit)="placeOrder()">
+                    <h5 class="mt-3">Shipping Address</h5>
+
+                    <div class="mb-2">
+                        <label for="address" class="form-label">Address</label>
+                        <textarea id="address" class="form-control" [(ngModel)]="shippingAddress" name="address" required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 mt-2">Place Order</button>
+                </form>
             </div>
         </div>
 
