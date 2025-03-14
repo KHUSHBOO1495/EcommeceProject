@@ -6,6 +6,10 @@ import Swal from 'sweetalert2';
 import { CartService } from '../cart.service';
 import { OrderService } from '../order.service';
 import { PaymentService } from '../payment.service';
+import { UserService } from '../user.service';
+
+
+declare var Razorpay:any;
 
 @Component({
   selector: 'app-cart',
@@ -16,16 +20,24 @@ import { PaymentService } from '../payment.service';
 export class CartComponent {
   cartId = ''
   cartProduct: any[] = [];
+  user: any = {};
   subtotal: number = 0;
   total: number = 0;
   totalItem: number = 0;
   showAddressForm: boolean = false;
   shippingAddress: any = ''
 
-  constructor(private _router: Router,private _apiCart: CartService, private _apiOrder: OrderService, private _apiPay: PaymentService) { }
+  constructor(private _router: Router,private _apiCart: CartService, private _apiOrder: OrderService, private _apiPay: PaymentService, private _apiUser: UserService) { }
 
   ngOnInit() {
     this.getAllCart();
+    this.getUser();
+  }
+
+  getUser() {
+    this._apiUser.getUser().subscribe((res: any) => {
+      this.user = res;
+    })
   }
 
   calculateTotal() {
@@ -84,8 +96,7 @@ export class CartComponent {
 
   placeOrder() {
     this._apiOrder.orderFromCart(this.shippingAddress).subscribe((res: any) => {
-      console.log(res)
-      this.showPaymentOptions(res.order._id);
+      this.showPaymentOptions(res.order._id, res.order.total_amount);
       // Swal.fire({
       //   title: 'Order Placed Successfully!',
       //   text: 'Your order has been confirmed. You will receive a confirmation email shortly.',
@@ -110,7 +121,7 @@ export class CartComponent {
     })
   }
 
-  showPaymentOptions(orderId: string) {
+  showPaymentOptions(orderId: string, orderAmount: number) {
     Swal.fire({
       title: 'Select Payment Method',
       text: 'Choose how you want to pay for your order.',
@@ -125,7 +136,7 @@ export class CartComponent {
     }).then((result) => {
       if (result.isConfirmed) {
         // User chose Razorpay
-        // this.payWithRazorpay(orderId);
+        this.payWithRazorpay(orderId,orderAmount);
       } else if (result.dismiss === Swal.DismissReason.cancel) {
         // User chose COD
         this.payWithCOD(orderId);
@@ -146,4 +157,69 @@ export class CartComponent {
       });
     })
   }
+
+  payWithRazorpay(orderId:any, orderAmount:any){
+    const RazorPayOptions = {
+      description: 'Sample Demo',
+      currency: 'INR',
+      amount: orderAmount*100,
+      name: this.user.first_name,
+      key: 'rzp_test_LEMyImcFyWSHFZ', // Use test key
+      // image: 'https://images.unsplash.com/photo-1575936123452-b67c3203c357?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D',
+      prefill: {
+        name: this.user.first_name,
+        email: this.user.email,
+        phone: this.user.phone_number,
+      },
+      theme: {
+        color: '#c9184a'
+      },
+      method: {  // Force enable UPI
+        upi: true,
+        card: true,
+        netbanking: true,
+        wallet: true,
+      },
+      handler: (res: any) => {
+        this.verifyPayment(orderId, res.razorpay_payment_id);
+      },
+      modal: {
+        ondismiss: () => {
+          console.log('Payment Cancelled');
+        }
+      }
+    };
+  
+    const successCallBack = (paymentId: any) => {
+      console.log('Payment Success:', paymentId);
+    };
+  
+    const failureCallBack = (error: any) => {
+      console.log('Payment Failed:', error);
+    };
+  
+    Razorpay.open(RazorPayOptions, successCallBack, failureCallBack);
+  }
+
+  verifyPayment(orderId: any,payment_id:any) {
+    this._apiPay.payRazor(orderId, payment_id).subscribe((res: any) => {
+      Swal.fire({
+        title: 'Payment Successful!',
+        text: 'Your order has been confirmed.',
+        icon: 'success',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#4CAF50'
+      }).then(() => {
+        // this._router.navigate(['/order-history']); // Redirect user
+      });
+    }, (error) => {
+      Swal.fire({
+        title: 'Payment Failed!',
+        text: 'Something went wrong. Please try again.',
+        icon: 'error',
+        confirmButtonText: 'Retry'
+      });
+    });
+  }
+  
 }

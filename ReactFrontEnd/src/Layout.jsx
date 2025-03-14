@@ -42,9 +42,9 @@ function Layout() {
                 <div className="offcanvas-body">
 
                     <ul className="navbar-nav justify-content-end menu-list list-unstyled d-flex gap-md-3 mb-0">
-                        {data.map((category) => {
+                        {data.map((category, index) => {
                             return (
-                                <li className="nav-item border-dashed active">
+                                <li className="nav-item border-dashed active" key={index}>
                                     <Link to={"/category/"+category._id} className="nav-link d-flex align-items-center gap-3 text-dark p-2" >
                                         <span data-bs-dismiss="offcanvas">{category.category_name}</span>
                                     </Link>
@@ -128,9 +128,9 @@ function Layout() {
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#" className="p-2 mx-1">
+                                    <Link to="/wishlist" className="p-2 mx-1">
                                         <svg width="24" height="24"><use xlinkHref="#wishlist"></use></svg>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
                                     <Link to="/cart" className="p-2 mx-1">

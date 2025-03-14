@@ -100,7 +100,7 @@ const RegistrationForm = () => {
           <span>Email</span>
         </label>
         <label>
-          <input class="input" type="tel" placeholder required onChange={(e)=>{
+          <input className="input" type="tel" placeholder required onChange={(e)=>{
               setData({...data, phone_number:e.target.value})
             }} />
           <span>Phone Number</span>

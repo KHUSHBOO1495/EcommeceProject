@@ -22,12 +22,17 @@ export class AllproductComponent {
   quantity: number = 1;
 
   selectedCategory: string = 'all';
-  minPrice :number=2000;
+  minPrice: number = 2000;
   maxPrice: number = 100000;
   maxPriceLimit: number = 100000;
   sortBy: string = 'none';
 
-  constructor(private _activeRoute: ActivatedRoute, private _apiProduct: ProductService, private _apiCart: CartService, private _apiWishlist: WishlistService) { }
+  constructor(
+    private _activeRoute: ActivatedRoute,
+    private _apiProduct: ProductService,
+    private _apiCart: CartService,
+    private _apiWishlist: WishlistService
+  ) {}
 
   ngOnInit(): void {
     this.category_id = this._activeRoute.snapshot.params['id'];
@@ -48,27 +53,27 @@ export class AllproductComponent {
   }
 
   addToCart(id: any) {
-    this._apiCart.insert(id, this.quantity).subscribe(res => {
+    this._apiCart.insert(id, this.quantity).subscribe((res) => {
       Swal.fire({
         title: 'Product Added to Cart!',
         text: 'Your item has been added successfully.',
         icon: 'success',
-        toast: true,  // Makes it a toast (non-blocking popup)
-        position: 'top-end',  // Positions it in the top-right corner
-        showConfirmButton: false,  // Hides the confirm button
-        timer: 2000,  // Auto-closes after 2 seconds
-        timerProgressBar: false,  // Shows a progress bar
-        background: '#f9f9f9',  // Light background
-        color: '#333',  // Text color
-        iconColor: '#4CAF50',  // Green icon color
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: false,
+        background: '#f9f9f9',
+        color: '#333',
+        iconColor: '#4CAF50',
         showClass: {
-          popup: 'animate__animated animate__fadeInRight'  // Animation for showing
+          popup: 'animate__animated animate__fadeInRight',
         },
         hideClass: {
-          popup: 'animate__animated animate__fadeOutRight'  // Animation for hiding
-        }
+          popup: 'animate__animated animate__fadeOutRight',
+        },
       });
-    })
+    });
   }
 
   isInWishlist(id: string): boolean {
@@ -77,20 +82,18 @@ export class AllproductComponent {
 
   addToWishlist(id: string) {
     this._apiWishlist.insert(id).subscribe((res: any) => {
-  
       if (res.status) {
         if (!this.isInWishlist(id)) {
           this.wishlistProductIds.push(id);
         }
       } else {
-        this.wishlistProductIds = this.wishlistProductIds.filter(pid => pid !== id);
+        this.wishlistProductIds = this.wishlistProductIds.filter((pid) => pid !== id);
       }
-  
-      // Show SweetAlert with dynamic message from response
+
       Swal.fire({
-        title: res.message,  // Show response message as title
+        title: res.message,
         text: 'Your wishlist has been updated successfully.',
-        icon: res.status ? 'success' : 'info',  // Success for added, Info for removed
+        icon: res.status ? 'success' : 'info',
         toast: true,
         position: 'top-end',
         showConfirmButton: false,
@@ -98,47 +101,46 @@ export class AllproductComponent {
         timerProgressBar: false,
         background: '#f9f9f9',
         color: '#333',
-        iconColor: res.status ? '#4CAF50' : '#FFA500', // Green for success, Orange for removed
+        iconColor: res.status ? '#4CAF50' : '#FFA500',
         showClass: {
-          popup: 'animate__animated animate__fadeInRight'
+          popup: 'animate__animated animate__fadeInRight',
         },
         hideClass: {
-          popup: 'animate__animated animate__fadeOutRight'
-        }
+          popup: 'animate__animated animate__fadeOutRight',
+        },
       });
-  
     });
   }
 
   getAllProduct() {
     this._apiProduct.getAll().subscribe((res: any) => {
       this.products = res;
-      this.filteredProducts = res;
-    })
+      this.filteredProducts = [...this.products];
+      this.applyFilters();
+    });
   }
 
   getProductsByCategory(categoryId: string): void {
     this._apiProduct.getAll().subscribe((res: any) => {
-      this.products = res;
-      this.filteredProducts = this.products.filter(product => product.category_id === categoryId)
-    })
+      this.products = res.filter((product:any) => product.category_id === categoryId);
+      this.filteredProducts = [...this.products];
+      this.applyFilters();
+    });
   }
 
   applyFilters(): void {
-    this.filteredProducts = this.products.filter(product => 
-      (this.selectedCategory === 'all' || product.category_id === this.selectedCategory) &&
-      product.final_price >= this.minPrice &&
-      product.final_price <= this.maxPrice
+    let filtered = this.products.filter(
+      (product) =>
+        (this.selectedCategory === 'all' || product.category_id === this.selectedCategory) &&
+        product.final_price >= this.minPrice &&
+        product.final_price <= this.maxPrice
     );
-  
+    this.filteredProducts = filtered;
     this.applySorting();
   }
 
   applySorting(): void {
     switch (this.sortBy) {
-      case 'none':
-        this.filteredProducts = [...this.products];
-        break;
       case 'price_low':
         this.filteredProducts.sort((a, b) => a.final_price - b.final_price);
         break;
@@ -151,6 +153,17 @@ export class AllproductComponent {
       case 'stock':
         this.filteredProducts.sort((a, b) => b.product_stock - a.product_stock);
         break;
+      default:
+        break;
     }
   }
+
+  handlePriceChange() {
+    this.applyFilters();
+  }
+
+  handleSortChange() {
+    this.applySorting();
+  }
 }
+

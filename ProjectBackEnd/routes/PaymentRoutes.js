@@ -31,7 +31,7 @@
 // module.exports = router;
 
 const express = require("express");
-const { authenticate } = require("../middleware/authMiddleware");
+const { authenticate, authorize } = require("../middleware/authMiddleware");
 const { createRazorpayOrder, verifyRazorpayPayment, createCODPayment } = require("../controller/paymentController");
 const router = express.Router();
 

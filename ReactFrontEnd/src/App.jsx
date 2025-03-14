@@ -6,6 +6,7 @@ import RegistrationForm from './Registration'
 import AllProduct from './components/AllProduct'
 import Cart from './components/Cart'
 import ProductDetail from './components/ProductDetail'
+import Wishlist from './components/Wishlist'
 
 function App() {
 
@@ -19,6 +20,7 @@ function App() {
             <Route path='/product/:id' element={<ProductDetail/>} />
             <Route path='/category/:id' element={<AllProduct/>} />
             <Route path='/cart' element={<Cart/>} />
+            <Route path='/wishlist' element={<Wishlist/>} />
           </Route>
           <Route path='/register' element={<RegistrationForm />}></Route>
           <Route path='/login' element={<LoginForm />}></Route>

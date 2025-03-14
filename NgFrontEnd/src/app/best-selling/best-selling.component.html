@@ -9,7 +9,7 @@
                     <h2 class="section-title">Best selling products</h2>
 
                     <div class="d-flex align-items-center">
-                        <a href="#" class="btn btn-primary rounded-1">View All</a>
+                        <a routerLink="/product" class="btn btn-primary rounded-1">View All</a>
                     </div>
                 </div>
 
@@ -34,23 +34,25 @@
                                 <div>
                                     <span class="rating" *ngFor="let star of [1, 2, 3, 4, 5]">
                                         <ng-container [ngSwitch]="true">
-                                          <!-- Full Star -->
-                                          <svg *ngSwitchCase="star <= prod.average_rating" width="18" height="18" class="text-warning">
-                                            <use xlink:href="#star-full"></use>
-                                          </svg>
-                                          
-                                          <!-- Half Star -->
-                                          <svg *ngSwitchCase="star - 1 < prod.average_rating && star > prod.average_rating" width="18" height="18" class="text-warning">
-                                            <use xlink:href="#star-half"></use>
-                                          </svg>
-                                      
-                                          <!-- Empty Star -->
-                                          <svg *ngSwitchDefault width="18" height="18" class="text-muted">
-                                            <use xlink:href="#star-empty"></use>
-                                          </svg>
+                                            <!-- Full Star -->
+                                            <svg *ngSwitchCase="star <= prod.average_rating" width="18" height="18"
+                                                class="text-warning">
+                                                <use xlink:href="#star-full"></use>
+                                            </svg>
+
+                                            <!-- Half Star -->
+                                            <svg *ngSwitchCase="star - 1 < prod.average_rating && star > prod.average_rating"
+                                                width="18" height="18" class="text-warning">
+                                                <use xlink:href="#star-half"></use>
+                                            </svg>
+
+                                            <!-- Empty Star -->
+                                            <svg *ngSwitchDefault width="18" height="18" class="text-muted">
+                                                <use xlink:href="#star-empty"></use>
+                                            </svg>
                                         </ng-container>
-                                      </span>
-                                      
+                                    </span>
+
                                     <span>({{prod.total_ratings}})</span>
                                 </div>
                                 <div class="d-flex justify-content-center align-items-center gap-2">
@@ -67,16 +69,17 @@
                                         </div> -->
                                         <div class="col">
                                             <button class="btn btn-primary rounded-1 p-2 fs-7 btn-cart"
-                                            (click)="addToCart(prod._id)">
-                                            <svg width="18" height="18">
-                                                <use xlink:href="#cart"></use>
-                                            </svg> Add to Cart
-                                        </button>
+                                                (click)="addToCart(prod._id)">
+                                                <svg width="18" height="18">
+                                                    <use xlink:href="#cart"></use>
+                                                </svg> Add to Cart
+                                            </button>
                                         </div>
                                         <div class="col-2 p-2">
-                                            <a *ngIf="isInWishlist(prod._id); else notLike" (click)="addToWishlist(prod._id)" style="cursor: pointer;">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="red"
-                                                    class="bi bi-heart-fill" viewBox="0 0 16 16">
+                                            <a *ngIf="isInWishlist(prod._id); else notLike"
+                                                (click)="addToWishlist(prod._id)" style="cursor: pointer;">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                                    fill="red" class="bi bi-heart-fill" viewBox="0 0 16 16">
                                                     <path fill-rule="evenodd"
                                                         d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314">
                                                     </path>

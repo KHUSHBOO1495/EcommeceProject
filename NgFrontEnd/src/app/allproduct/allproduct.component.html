@@ -11,14 +11,14 @@
                 </label> -->
                 <div class="form-group mt-3">
                     <label class="fw-bold">Price Range</label>
-                    <input type="range" class="form-range" [min]="minPrice" [max]="maxPriceLimit"
-                        [(ngModel)]="maxPrice" (change)="applyFilters()">
+                    <input type="range" class="form-range" [min]="minPrice" [max]="maxPriceLimit" 
+                        [(ngModel)]="maxPrice" (change)="handlePriceChange()">
                     <span class="text-primary">Up to ₹{{ maxPrice }}</span>
                 </div>
 
                 <div class="form-group mt-3">
                     <label class="fw-bold">Sort By</label>
-                    <select class="form-control border-primary" [(ngModel)]="sortBy" (change)="applySorting()">
+                    <select class="form-control border-primary" [(ngModel)]="sortBy" (change)="handleSortChange()">
                         <option value="none">None</option>
                         <option value="price_low">Price: Low to High</option>
                         <option value="price_high">Price: High to Low</option>
@@ -27,7 +27,6 @@
                     </select>
                 </div>
             </div>
-            <!-- Add more filters here -->
         </div>
 
         <!-- Product Cards Section -->

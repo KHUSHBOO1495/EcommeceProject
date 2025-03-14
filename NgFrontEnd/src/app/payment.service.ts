@@ -12,4 +12,8 @@ export class PaymentService {
   payCOD( order_id :any){
     return this._http.post(this.apiUrl+"/cod",{ order_id }, {headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('token')}`)});
   }
+
+  payRazor( order_id: any, payment_id:any){
+    return this._http.post(this.apiUrl+"/razorpay",{ order_id, payment_id }, {headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('token')}`)});
+  }
 }

@@ -12,7 +12,7 @@ const razorpayInstance = new Razorpay({
 // API to Create Razorpay Order
 const createRazorpayOrder = async (req, res) => {
     try {
-        const { order_id } = req.body;  // Order ID from the frontend
+        const { order_id, payment_id } = req.body;  // Order ID from the frontend
 
         // Fetch the order to get the total amount
         const order = await Order.findById(order_id);
@@ -34,6 +34,7 @@ const createRazorpayOrder = async (req, res) => {
             payment_method: "Razorpay",
             amount: order.total_amount,
             razorpay_order_id: razorpayOrder.id,
+            razorpay_payment_id: payment_id,
             payment_status: "Pending",
         });
 

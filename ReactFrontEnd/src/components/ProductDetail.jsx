@@ -105,6 +105,11 @@ function ProductDetail(){
             <h3 className="text-primary">₹{productDetail?.final_price}</h3>
           </div>
 
+          <div className="d-flex align-items-center">
+                <h6 className="me-2">Size:</h6>
+                <h6 className="text-primary">{ productDetail?.product?.size }</h6>
+            </div>
+
           <div className="my-3">
           <span className="rating">
                         {[1, 2, 3, 4, 5].map(star => {
