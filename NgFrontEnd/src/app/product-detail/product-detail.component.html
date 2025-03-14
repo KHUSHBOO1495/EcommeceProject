@@ -35,7 +35,7 @@
                 <h6 class="me-2">Size:</h6>
                 <h6 class="text-primary">{{ productData?.product?.size }}</h6>
             </div>
-            
+
             <div class="my-3">
                 <span class="rating" *ngFor="let star of [1, 2, 3, 4, 5]">
                     <ng-container [ngSwitch]="true">
@@ -67,38 +67,75 @@
 
     <div class="my-5">
         <h4>Customer Feedback</h4>
-
-        <!-- <div *ngFor="let comment of product.comments" class="my-3">
-            <div class="border p-3 rounded">
-                <strong>{{ comment.userName }}</strong> <small class="text-muted">{{ comment.date }}</small>
-                <p>{{ comment.text }}</p>
-                <div class="d-flex align-items-center">
-                    <span class="me-2">Rating:</span>
-                    <span *ngFor="let star of [1, 2, 3, 4, 5]">
-                        <svg *ngIf="star <= comment.rating" width="18" height="18" class="text-warning">
-                            <use xlink:href="#star-full"></use>
-                        </svg>
-                    </span>
-                </div>
-            </div>
-        </div> -->
-
-        <!-- Comment Box -->
-        <!-- <div class="mt-4">
+        <div class="mt-4">
             <h5>Leave a Feedback</h5>
-            <form (submit)="submitComment()">
+            <form (ngSubmit)="submitComment()">
                 <div class="mb-3">
                     <textarea [(ngModel)]="newComment.text" name="commentText" rows="4" class="form-control"
                         placeholder="Write your feedback..." required></textarea>
                 </div>
                 <div class="d-flex gap-2">
-                    <label for="rating" class="form-label">Rating</label>
+                    <label htmlFor="rating" class="form-label">
+                        Rating
+                    </label>
                     <select [(ngModel)]="newComment.rating" name="rating" class="form-select" required>
                         <option *ngFor="let rate of [1, 2, 3, 4, 5]" [value]="rate">{{ rate }}</option>
                     </select>
                 </div>
                 <button type="submit" class="btn btn-primary mt-3">Submit</button>
             </form>
-        </div> -->
+        </div>
+        <div class="mt-5">
+            <h5>All Feedback</h5>
+            <div *ngIf="feedback.length > 0">
+                <div *ngFor="let feedbackItem of feedback" class="mb-4 p-3 border rounded">
+                    <div class="d-flex align-items-center">
+                        <img *ngIf="feedbackItem.user_id.profile_picture; else defaultImage"
+                            [src]="feedbackItem.user_id.profile_picture" style="border-radius: 50%; object-fit: cover"
+                            width="40" height="40">
+                        <ng-template #defaultImage>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor"
+                                class="bi bi-person-circle" viewBox="0 0 16 16">
+                                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"></path>
+                                <path fill-rule="evenodd"
+                                    d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1">
+                                </path>
+                            </svg>
+                        </ng-template>
+                        <div class="ms-3">
+                            <h6 class="mb-1">
+                                {{ feedbackItem.user_id.first_name }} {{ feedbackItem.user_id.last_name }}
+                            </h6>
+                            <span class="text-muted">
+                                {{ feedbackItem.commented_at | date: 'dd/LL/Y' }}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="my-2">
+                        <span class="rating" *ngFor="let star of [1, 2, 3, 4, 5]">
+                            <ng-container [ngSwitch]="true">
+                                <svg *ngSwitchCase="star <= productData.average_rating" width="18" height="18"
+                                    class="text-warning">
+                                    <use xlink:href="#star-full"></use>
+                                </svg>
+
+                                <svg *ngSwitchCase="star - 1 < productData.average_rating && star > productData.average_rating"
+                                    width="18" height="18" class="text-warning">
+                                    <use xlink:href="#star-half"></use>
+                                </svg>
+
+                                <svg *ngSwitchDefault width="18" height="18" class="text-muted">
+                                    <use xlink:href="#star-empty"></use>
+                                </svg>
+                            </ng-container>
+                        </span>
+                    </div>
+                    <p>{{ feedbackItem.comment }}</p>
+                </div>
+            </div>
+            <div *ngIf="feedback.length === 0">
+                <p>No feedback available.</p>
+            </div>
+        </div>
     </div>
 </div>

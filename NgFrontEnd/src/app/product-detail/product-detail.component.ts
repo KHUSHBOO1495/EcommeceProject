@@ -1,22 +1,26 @@
-import { NgFor, NgSwitch, NgSwitchCase, NgSwitchDefault } from '@angular/common';
+import { CommonModule, NgFor, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault } from '@angular/common';
 import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import Swal from 'sweetalert2';
 import { CartService } from '../cart.service';
+import { FeedbackService } from '../feedback.service';
 import { ProductService } from '../product.service';
 
 @Component({
   selector: 'app-product-detail',
-  imports: [NgFor, NgSwitch, NgSwitchCase, NgSwitchDefault],
+  imports: [NgFor, NgSwitch, NgSwitchCase, NgSwitchDefault,CommonModule, NgIf, FormsModule],
   templateUrl: './product-detail.component.html',
   styleUrl: './product-detail.component.css'
 })
 export class ProductDetailComponent {
   product_id: any;
   productData: any = {};
+  feedback: any[] = [];
+  newComment: any = { rating: '', text: '' };
   quantity: number = 1;
 
-  constructor(private _activeRoute: ActivatedRoute, private _apiProduct: ProductService, private _apiCart: CartService) { }
+  constructor(private _activeRoute: ActivatedRoute, private _apiProduct: ProductService, private _apiCart: CartService, private _feedbackService: FeedbackService) { }
 
   ngOnInit() {
     this.product_id = this._activeRoute.snapshot.params['id'];
@@ -24,6 +28,7 @@ export class ProductDetailComponent {
       console.log(res)
       this.productData = res
     })
+    this.getFeedback();
   }
 
   addToCart(id: any) {
@@ -48,6 +53,52 @@ export class ProductDetailComponent {
         }
       });
     })
+  }
+
+  getFeedback() {
+    this._feedbackService.getFeedback(this.product_id).subscribe((res: any) => {
+      if (res.feedbacks) {
+        this.feedback = res.feedbacks; // Store feedbacks in the array
+      } else {
+        this.feedback = [];
+      }
+    });
+  }
+
+  submitComment() {
+    if (this.newComment.text && this.newComment.rating) {
+      this._feedbackService.newComment(this.product_id, this.newComment).subscribe(res => {
+        Swal.fire({
+          title: 'Thank you for your feedback!',
+          text: 'Your comment has been submitted successfully.',
+          icon: 'success',
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 2000,
+          background: '#f9f9f9',
+          color: '#333',
+          iconColor: '#4CAF50',
+        });
+
+        // Reset the new comment form
+        this.newComment = { rating: '', text: '' };
+        this.getFeedback(); // Reload feedback after submission
+      }, error => {
+        Swal.fire({
+          title: 'Error',
+          text: 'There was an issue submitting your comment. Please try again later.',
+          icon: 'error',
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 2000,
+          background: '#f9f9f9',
+          color: '#333',
+          iconColor: '#FF6347',
+        });
+      });
+    }
   }
 
   orderNow() {

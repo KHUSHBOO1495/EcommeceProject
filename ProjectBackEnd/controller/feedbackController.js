@@ -14,7 +14,8 @@ const getAllFeedback = async (req, res) => {
 const getAllFeedbackOfProduct = async (req, res) => {
     try {
         const { productId } = req.params;
-        const feedbacks = await Feedback.find({ product_id: productId });
+        const feedbacks = await Feedback.find({ product_id: productId }).populate('user_id')
+        .sort({ commented_at: -1 });
 
         if (!feedbacks.length) {
             return res.status(404).json({ message: 'No feedback found for this product' });

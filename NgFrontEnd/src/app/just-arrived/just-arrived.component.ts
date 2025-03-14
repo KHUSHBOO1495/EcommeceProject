@@ -107,7 +107,9 @@ export class JustArrivedComponent {
   
     getAllProduct() {
       this._apiProduct.getAll().subscribe((res: any) => {
-        this.products = res.filter((p:any) => this.dateDiff(p.created_at) <= 10).slice(0, 10);
+        this.products = res.filter((p:any) => this.dateDiff(p.created_at) <= 10)
+        .sort((a: any, b: any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+        .slice(0, 10);
       })
     }
 }

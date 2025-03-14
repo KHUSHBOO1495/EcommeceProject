@@ -35,7 +35,9 @@ function JustArrived() {
         })
             .then(res => res.json())
             .then(res => {
-                const filteredProducts = res.filter(p => dateDiff(p.created_at) <= 10).slice(0, 10);
+                const filteredProducts = res.filter(p => dateDiff(p.created_at) <= 10)
+                .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+                .slice(0, 10);
                 setProduct(filteredProducts);
             })
             .catch(error => console.error('Error fetching products:', error));

@@ -58,7 +58,7 @@ function Home() {
                         slidesPerView: 3,
                     },
                     991: {
-                        slidesPerView: 6,
+                        slidesPerView: 5,
                     },
                     1500: {
                         slidesPerView: 8,
