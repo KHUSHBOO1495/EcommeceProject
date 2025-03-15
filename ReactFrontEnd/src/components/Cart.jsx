@@ -88,27 +88,9 @@ function Cart() {
     const toggleAddressForm = () => {
         setShowAddressForm(!showAddressForm);
     }
-
-    const placeOrder = (e) => {
-        e.preventDefault(); 
-        fetch(orderUrl + "/cart", {
-            method: 'POST',
-            body: JSON.stringify({
-                shipping_address: shippingAddress
-            }),
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": "Bearer " + token
-            }
-        })
-            .then(res => res.json())
-            .then(res => {
-                getAllCartProducts();
-                showPaymentOptions(res.order._id, res.order.total_amount);
-            });
-    }
-
-    const showPaymentOptions = (orderId, orderAmount) => {
+    
+    const showPaymentOptions = (e) => {
+        e.preventDefault();
         Swal.fire({
             title: 'Select Payment Method',
             text: 'Choose how you want to pay for your order.',
@@ -122,9 +104,37 @@ function Cart() {
             color: '#333'
         }).then((result) => {
             if (result.isConfirmed) {
-                payWithRazorpay(orderId, orderAmount);
+                fetch(orderUrl + "/cart", {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        shipping_address: shippingAddress
+                    }),
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": "Bearer " + token
+                    }
+                })
+                .then(res => res.json())
+                .then(res => {
+                    getAllCartProducts();
+                    payWithRazorpay(res.order._id, res.order.total_amount);
+                });
             } else if (result.dismiss === Swal.DismissReason.cancel) {
-                payWithCOD(orderId);
+                fetch(orderUrl + "/cart", {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        shipping_address: shippingAddress
+                    }),
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": "Bearer " + token
+                    }
+                })
+                .then(res => res.json())
+                .then(res => {
+                    getAllCartProducts();
+                    payWithCOD(res.order._id);
+                });
             }
         });
     }
@@ -197,8 +207,8 @@ function Cart() {
         Razorpay.open(RazorPayOptions, successCallBack, failureCallBack);
     }
 
-    const verifyPayment = (orderId,payment_id) => {
-        fetch(paymentUrl+"/razorpay", {
+    const verifyPayment = (orderId, payment_id) => {
+        fetch(paymentUrl + "/razorpay", {
             method: 'POST',
             body: JSON.stringify({
                 order_id: orderId,
@@ -209,25 +219,25 @@ function Cart() {
                 "Authorization": "Bearer " + token
             }
         })
-        .then(res => res.json())
-        .then(res => {
-            Swal.fire({
-                title: 'Payment Successful!',
-                text: 'Your order has been confirmed.',
-                icon: 'success',
-                confirmButtonText: 'OK',
-                confirmButtonColor: '#4CAF50'
-              }).then(() => {
-                // this._router.navigate(['/order-history']); // Redirect user
-              });
+            .then(res => res.json())
+            .then(res => {
+                Swal.fire({
+                    title: 'Payment Successful!',
+                    text: 'Your order has been confirmed.',
+                    icon: 'success',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#4CAF50'
+                }).then(() => {
+                    // this._router.navigate(['/order-history']); // Redirect user
+                });
             }, (error) => {
-              Swal.fire({
-                title: 'Payment Failed!',
-                text: 'Something went wrong. Please try again.',
-                icon: 'error',
-                confirmButtonText: 'Retry'
-              });
-        })    
+                Swal.fire({
+                    title: 'Payment Failed!',
+                    text: 'Something went wrong. Please try again.',
+                    icon: 'error',
+                    confirmButtonText: 'Retry'
+                });
+            })
     }
 
     return (
@@ -332,7 +342,7 @@ function Cart() {
                                         value={shippingAddress}
                                         onChange={(e) => setShippingAddress(e.target.value)} />
                                 </div>
-                                <button type="submit" className="btn btn-primary w-100 mt-2" onClick={(e) => placeOrder(e)}>Place Order</button>
+                                <button type="submit" className="btn btn-primary w-100 mt-2" onClick={(e) => showPaymentOptions(e)}>Place Order</button>
                             </form>
                         )}
                     </div>

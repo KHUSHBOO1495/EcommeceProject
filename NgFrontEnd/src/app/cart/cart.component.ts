@@ -94,34 +94,8 @@ export class CartComponent {
     this.showAddressForm = true;
   }
 
-  placeOrder() {
-    this._apiOrder.orderFromCart(this.shippingAddress).subscribe((res: any) => {
-      this.showPaymentOptions(res.order._id, res.order.total_amount);
-      // Swal.fire({
-      //   title: 'Order Placed Successfully!',
-      //   text: 'Your order has been confirmed. You will receive a confirmation email shortly.',
-      //   icon: 'success',
-      //   confirmButtonText: 'OK',
-      //   confirmButtonColor: '#4CAF50', // Green Button
-      //   background: '#f9f9f9', // Light Background
-      //   color: '#333', // Text Color
-      //   timer: 3000, // Auto-close after 3 seconds
-      //   timerProgressBar: true, // Show progress bar
-      //   showClass: {
-      //     popup: 'animate__animated animate__fadeInDown' // Animation for showing
-      //   },
-      //   hideClass: {
-      //     popup: 'animate__animated animate__fadeOutUp' // Animation for hiding
-      //   }
-      // }).then(() => {
-      //   // Redirect to order history or home page after confirmation
-      //   // this._router.navigate(['/order-history']);
-      // });
-      this.getAllCart();
-    })
-  }
 
-  showPaymentOptions(orderId: string, orderAmount: number) {
+  showPaymentOptions() {
     Swal.fire({
       title: 'Select Payment Method',
       text: 'Choose how you want to pay for your order.',
@@ -135,11 +109,17 @@ export class CartComponent {
       color: '#333'
     }).then((result) => {
       if (result.isConfirmed) {
-        // User chose Razorpay
-        this.payWithRazorpay(orderId,orderAmount);
+        this._apiOrder.orderFromCart(this.shippingAddress).subscribe((res: any) => {
+
+          this.getAllCart();
+          this.payWithRazorpay(res.order._id, res.order.total_amount);
+        })
       } else if (result.dismiss === Swal.DismissReason.cancel) {
-        // User chose COD
-        this.payWithCOD(orderId);
+        this._apiOrder.orderFromCart(this.shippingAddress).subscribe((res: any) => {
+
+          this.getAllCart();
+        this.payWithCOD(res.order._id);
+      })
       }
     });
   }

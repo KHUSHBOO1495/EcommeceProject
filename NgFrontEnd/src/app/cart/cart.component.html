@@ -91,7 +91,7 @@
                     Proceed to Checkout
                 </button>
 
-                <form *ngIf="showAddressForm" (ngSubmit)="placeOrder()">
+                <form *ngIf="showAddressForm" (ngSubmit)="showPaymentOptions()">
                     <h5 class="mt-3">Shipping Address</h5>
 
                     <div class="mb-2">
