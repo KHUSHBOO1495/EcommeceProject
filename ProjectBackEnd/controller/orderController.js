@@ -25,9 +25,9 @@ const getOrderById = async (req, res) => {
         if (!order) {
             return res.status(404).json({ message: "Order not found!" });
         }
-
-        if (order.user_id.toString() !== uId || req.user.role !== 'admin') {
-            return res.status(403).json({ message: "Access denied. You can't access this cart." });
+        
+        if (order.user_id.toString() !== uId && req.user.role !== 'admin') {
+            return res.status(403).json({ message: "Access denied. You can't access this order." });
         }
 
         res.status(200).json(order);

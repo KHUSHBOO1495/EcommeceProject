@@ -9,8 +9,15 @@ export class OrderService {
 
   constructor(private _http:HttpClient) { }
 
-
   orderFromCart(shipping_address:any){
     return this._http.post(this.apiUrl+"/cart",{ shipping_address }, {headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('token')}`)});
+  }
+
+  getOrder(){
+    return this._http.get(this.apiUrl+"/user", {headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('token')}`)});
+  }
+
+  getOrderById(Id:any){
+    return this._http.get(this.apiUrl+"/"+Id, {headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('token')}`)});
   }
 }

@@ -19,8 +19,4 @@ export class CategoryComponent {
       this.data=res;
     })
   }
-
-  getProductByCat(id:any){
-    this._router.navigate(['category',id])
-  }
 }

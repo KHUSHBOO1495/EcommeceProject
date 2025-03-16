@@ -19,14 +19,13 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-12" >
 
                 <div class="category-carousel swiper">
                     <div class="swiper-wrapper">
-                        <a *ngFor="let cat of data" [routerLink]="['/category', cat._id]" class="nav-link swiper-slide text-center">
-                            <div (click)="getProductByCat(cat._id)">
+                        <a *ngFor="let cat of data;" [routerLink]="['/category', cat._id]" class="nav-link swiper-slide text-center">
                             <img src={{cat.image_url}} class="rounded-circle" alt="Category Thumbnail" height="165">
-                            <h4 class="fs-6 mt-3 fw-normal category-title">{{cat.category_name}}</h4></div>
+                            <h4 class="fs-6 mt-3 fw-normal category-title">{{cat.category_name}}</h4>
                         </a>
                         <!-- <a href="category.html" class="nav-link swiper-slide text-center">
                             <img src="images/category-thumb-2.jpg" class="rounded-circle" alt="Category Thumbnail">

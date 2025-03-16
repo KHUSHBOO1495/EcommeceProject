@@ -25,7 +25,6 @@ export class ProductDetailComponent {
   ngOnInit() {
     this.product_id = this._activeRoute.snapshot.params['id'];
     this._apiProduct.getProductById(this.product_id).subscribe((res: any) => {
-      console.log(res)
       this.productData = res
     })
     this.getFeedback();

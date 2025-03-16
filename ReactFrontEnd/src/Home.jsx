@@ -1371,7 +1371,7 @@ function Home() {
 
                         <div className="col-lg-3 col-md-6 col-sm-6">
                             <div className="footer-menu">
-                                <img src="images/logo.jpg" width="220" height="auto" alt="logo" />
+                                <img src="images/logo.jpg" width="200" height="auto" alt="logo" />
                                 <div className="social-links mt-3">
                                     <ul className="d-flex list-unstyled gap-2">
                                         <li>
@@ -1406,7 +1406,7 @@ function Home() {
 
                         <div className="col-md-2 col-sm-6">
                             <div className="footer-menu">
-                                <h5 className="widget-title">Organic</h5>
+                                <h5 className="widget-title">VintageVastra</h5>
                                 <ul className="menu-list list-unstyled">
                                     <li className="menu-item">
                                         <a href="#" className="nav-link">About us</a>
@@ -1497,7 +1497,7 @@ function Home() {
                 <div className="container-lg">
                     <div className="row">
                         <div className="col-md-6 copyright">
-                            <p>© 2024 Organic. All rights reserved.</p>
+                            <p>© 2024 VintageVastra. All rights reserved.</p>
                         </div>
                         <div className="col-md-6 credit-link text-start text-md-end">
                             <p>HTML Template by <a href="https://templatesjungle.com/">TemplatesJungle</a> Distributed By <a href="https://themewagon.com">ThemeWagon</a> </p>

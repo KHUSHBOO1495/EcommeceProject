@@ -133,7 +133,7 @@ export class CartComponent {
         confirmButtonText: 'OK',
         confirmButtonColor: '#4CAF50'
       }).then(() => {
-        // this._router.navigate(['/order-history']); // Redirect user
+        this._router.navigate(['/order-history']);
       });
     })
   }
@@ -190,7 +190,7 @@ export class CartComponent {
         confirmButtonText: 'OK',
         confirmButtonColor: '#4CAF50'
       }).then(() => {
-        // this._router.navigate(['/order-history']); // Redirect user
+        this._router.navigate(['/order-history']);
       });
     }, (error) => {
       Swal.fire({

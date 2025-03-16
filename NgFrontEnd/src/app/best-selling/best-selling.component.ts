@@ -107,7 +107,7 @@ export class BestSellingComponent {
   
     getAllProduct() {
       this._apiProduct.getAll().subscribe((res: any) => {
-        this.products = res.filter((p:any) => this.dateDiff(p.created_at) <= 7 && p.average_rating >= 4.5).sort((a:any, b:any) => b.total_ratings - a.total_ratings).slice(0, 10);
+        this.products = res.filter((p:any) => this.dateDiff(p.created_at) <= 30 && p.average_rating >= 4.5).sort((a:any, b:any) => b.total_ratings - a.total_ratings).slice(0, 10);
       })
     }
 }

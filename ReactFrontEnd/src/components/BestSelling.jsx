@@ -35,7 +35,7 @@ function BestSelling() {
         })
             .then(res => res.json())
             .then(res => {
-                const filteredProducts = res.filter(p => dateDiff(p.created_at) <= 7 && p.average_rating >= 4.5).sort((a, b) => b.total_ratings - a.total_ratings).slice(0, 10);
+                const filteredProducts = res.filter(p => dateDiff(p.created_at) <= 30 && p.average_rating >= 4.5).sort((a, b) => b.total_ratings - a.total_ratings).slice(0, 10);
                 setProduct(filteredProducts);
             })
             .catch(error => console.error('Error fetching products:', error));
