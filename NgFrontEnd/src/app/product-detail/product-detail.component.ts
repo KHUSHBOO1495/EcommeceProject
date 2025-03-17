@@ -1,11 +1,16 @@
 import { CommonModule, NgFor, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { CartService } from '../cart.service';
 import { FeedbackService } from '../feedback.service';
+import { OrderService } from '../order.service';
+import { PaymentService } from '../payment.service';
 import { ProductService } from '../product.service';
+import { UserService } from '../user.service';
+
+declare var Razorpay:any;
 
 @Component({
   selector: 'app-product-detail',
@@ -16,11 +21,12 @@ import { ProductService } from '../product.service';
 export class ProductDetailComponent {
   product_id: any;
   productData: any = {};
+  user: any = {};
   feedback: any[] = [];
   newComment: any = { rating: '', text: '' };
   quantity: number = 1;
 
-  constructor(private _activeRoute: ActivatedRoute, private _apiProduct: ProductService, private _apiCart: CartService, private _feedbackService: FeedbackService) { }
+  constructor(private _router: Router,private _activeRoute: ActivatedRoute, private _apiUser: UserService, private _apiPay: PaymentService,private _apiProduct: ProductService, private _apiCart: CartService, private _feedbackService: FeedbackService, private _orderService: OrderService) { }
 
   ngOnInit() {
     this.product_id = this._activeRoute.snapshot.params['id'];
@@ -99,9 +105,131 @@ export class ProductDetailComponent {
       });
     }
   }
-
-  orderNow() {
-
+ 
+  orderNow(): void {
+    Swal.fire({
+      title: 'Enter Shipping Address',
+      input: 'textarea',
+      inputPlaceholder: 'Enter your shipping address here...',
+      showCancelButton: true,
+      confirmButtonText: 'Place order',
+      cancelButtonText: 'Cancel',
+      confirmButtonColor: '#007bff',
+      cancelButtonColor: '#dc3545',
+      background: '#f9f9f9',
+      color: '#333',
+    }).then((result) => {
+      const shippingAddress = result.value;
+  
+      if (shippingAddress) {
+        Swal.fire({
+          title: 'Select Payment Method',
+          text: 'Choose how you want to pay for your order.',
+          icon: 'info',
+          showCancelButton: true,
+          confirmButtonText: 'Pay with Razorpay',
+          cancelButtonText: 'Cash on Delivery (COD)',
+          confirmButtonColor: '#007bff',  // Blue for Razorpay
+          cancelButtonColor: '#28a745',  // Green for COD
+        }).then((paymentResult) => {
+          if (paymentResult.isConfirmed) {
+            this._orderService.orderSingle(this.product_id, this.quantity, shippingAddress).subscribe((res: any) => {
+              this.payWithRazorpay(res.order._id, res.order.total_amount);
+            });
+          } else if (paymentResult.dismiss === Swal.DismissReason.cancel) {
+            this._orderService.orderSingle(this.product_id, this.quantity, shippingAddress).subscribe((res: any) => {
+              this.payWithCOD(res.order._id);
+            });
+          }
+        });
+      } else {
+        Swal.fire({
+          title: 'Address Required!',
+          text: 'Please enter a shipping address to continue.',
+          icon: 'error',
+          confirmButtonText: 'OK',
+        });
+      }
+    });
   }
+  
+  
+    payWithCOD(orderId:any){
+      this._apiPay.payCOD(orderId).subscribe((res:any)=>{
+        Swal.fire({
+          title: 'COD Selected',
+          text: 'Your order has been placed successfully. Pay upon delivery.',
+          icon: 'success',
+          confirmButtonText: 'OK',
+          confirmButtonColor: '#4CAF50'
+        }).then(() => {
+          this._router.navigate(['/order-history']);
+        });
+      })
+    }
+  
+    payWithRazorpay(orderId:any, orderAmount:any){
+      const RazorPayOptions = {
+        description: 'Sample Demo',
+        currency: 'INR',
+        amount: orderAmount*100,
+        name: this.user.first_name,
+        key: 'rzp_test_LEMyImcFyWSHFZ', // Use test key
+        // image: 'https://images.unsplash.com/photo-1575936123452-b67c3203c357?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D',
+        prefill: {
+          name: this.user.first_name,
+          email: this.user.email,
+          phone: this.user.phone_number,
+        },
+        theme: {
+          color: '#c9184a'
+        },
+        method: {  // Force enable UPI
+          upi: true,
+          card: true,
+          netbanking: true,
+          wallet: true,
+        },
+        handler: (res: any) => {
+          this.verifyPayment(orderId, res.razorpay_payment_id);
+        },
+        modal: {
+          ondismiss: () => {
+            console.log('Payment Cancelled');
+          }
+        }
+      };
+    
+      const successCallBack = (paymentId: any) => {
+        console.log('Payment Success:', paymentId);
+      };
+    
+      const failureCallBack = (error: any) => {
+        console.log('Payment Failed:', error);
+      };
+    
+      Razorpay.open(RazorPayOptions, successCallBack, failureCallBack);
+    }
+  
+    verifyPayment(orderId: any,payment_id:any) {
+      this._apiPay.payRazor(orderId, payment_id).subscribe((res: any) => {
+        Swal.fire({
+          title: 'Payment Successful!',
+          text: 'Your order has been confirmed.',
+          icon: 'success',
+          confirmButtonText: 'OK',
+          confirmButtonColor: '#4CAF50'
+        }).then(() => {
+          this._router.navigate(['/order-history']);
+        });
+      }, (error) => {
+        Swal.fire({
+          title: 'Payment Failed!',
+          text: 'Something went wrong. Please try again.',
+          icon: 'error',
+          confirmButtonText: 'Retry'
+        });
+      });
+    }
 
 }

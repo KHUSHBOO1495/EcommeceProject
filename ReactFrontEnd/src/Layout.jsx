@@ -105,7 +105,7 @@ function Layout() {
                                     <ul className="dropdown-menu border-0 p-3 rounded-0 shadow" aria-labelledby="pages">
                                         <li><Link to="/" className="dropdown-item">About Us </Link></li>
                                         <li><Link to="/product" className="dropdown-item">Shop </Link></li>
-                                        <li><Link to="/" className="dropdown-item">Single Product </Link></li>
+                                        <li><Link to="/order-history" className="dropdown-item">Order History </Link></li>
                                         <li><Link to="/" className="dropdown-item">Cart </Link></li>
                                         <li><Link to="/" className="dropdown-item">Checkout </Link></li>
                                         <li><Link to="/" className="dropdown-item">Blog </Link></li>

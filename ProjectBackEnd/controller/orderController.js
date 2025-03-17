@@ -146,7 +146,7 @@ const createSingleOrder = async (req, res) => {
     try {
         const { product_id, quantity, shipping_address, coupon_code } = req.body;
         const user_id = req.user.user_id;
-
+        console.log(user_id,product_id,quantity,shipping_address)
         if (!user_id || !product_id || !quantity || !shipping_address) {
             return res.status(400).json({ message: "User ID, Product ID, quantity, and shipping address are required" });
         }

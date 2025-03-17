@@ -38,19 +38,19 @@
 
             <div class="d-flex align-items-center">
                 <p class="me-2">Stock:</p>
-                <p *ngIf="productData.product.product_stock>0" class="text-success">In Stock</p>
-                <p *ngIf="productData.product.product_stock<=0" class="text-danger">Out of Stock</p>
+                <p *ngIf="productData?.product?.product_stock>0" class="text-success">In Stock</p>
+                <p *ngIf="productData?.product?.product_stock<=0" class="text-danger">Out of Stock</p>
             </div>
 
             <div class="my-3">
                 <span class="rating" *ngFor="let star of [1, 2, 3, 4, 5]">
                     <ng-container [ngSwitch]="true">
-                        <svg *ngSwitchCase="star <= productData.average_rating" width="18" height="18"
+                        <svg *ngSwitchCase="star <= productData?.average_rating" width="18" height="18"
                             class="text-warning">
                             <use xlink:href="#star-full"></use>
                         </svg>
 
-                        <svg *ngSwitchCase="star - 1 < productData.average_rating && star > productData.average_rating"
+                        <svg *ngSwitchCase="star - 1 < productData?.average_rating && star > productData?.average_rating"
                             width="18" height="18" class="text-warning">
                             <use xlink:href="#star-half"></use>
                         </svg>
@@ -60,13 +60,18 @@
                         </svg>
                     </ng-container>
                 </span>
-                <span class="ms-2">({{ productData.total_ratings }} reviews)</span>
+                <span class="ms-2">({{ productData?.total_ratings }} reviews)</span>
             </div>
             <p>{{ productData?.description }}</p>
 
             <div class="d-flex gap-3">
-                <button class="btn btn-primary" (click)="addToCart(productData.product._id)" [disabled]="productData.product.product_stock <= 0">Add to Cart</button>
+                <button class="btn btn-primary" (click)="addToCart(productData?.product._id)" [disabled]="productData?.product?.product_stock <= 0">Add to Cart</button>
                 <button class="btn btn-warning" (click)="orderNow()">Order Now</button>
+            </div>
+
+            <div>
+                <h6 class="m-2">Description:</h6>
+                <p class="ms-2">{{ productData?.product?.description }}</p>
             </div>
         </div>
     </div>
@@ -120,12 +125,12 @@
                     <div class="my-2">
                         <span class="rating" *ngFor="let star of [1, 2, 3, 4, 5]">
                             <ng-container [ngSwitch]="true">
-                                <svg *ngSwitchCase="star <= productData.average_rating" width="18" height="18"
+                                <svg *ngSwitchCase="star <= productData?.average_rating" width="18" height="18"
                                     class="text-warning">
                                     <use xlink:href="#star-full"></use>
                                 </svg>
 
-                                <svg *ngSwitchCase="star - 1 < productData.average_rating && star > productData.average_rating"
+                                <svg *ngSwitchCase="star - 1 < productData?.average_rating && star > productData?.average_rating"
                                     width="18" height="18" class="text-warning">
                                     <use xlink:href="#star-half"></use>
                                 </svg>

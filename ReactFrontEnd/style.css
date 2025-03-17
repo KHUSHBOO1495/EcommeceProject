@@ -724,3 +724,66 @@ a.btn-link.text-light:after {
       height: 60px;
   }
 }
+
+/* order */
+.order-container {
+  max-width: 900px;
+  margin: 40px auto;
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.order-item {
+  border-bottom: 1px solid #ddd;
+  padding: 15px 0;
+}
+.order-item:last-child {
+  border-bottom: none;
+}
+.btn-view {
+  background-color: #c9184a;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+.btn-view:hover {
+  background-color: #a1123a;
+}
+
+/* order detail */
+.custom-card {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.section-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+
+.custom-table thead {
+  background: #f8f9fa;
+}
+
+.custom-btn {
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-decoration: none;
+}
+
+.custom-btn-secondary {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-decoration: none;
+}
+
+.custom-btn-secondary:hover {
+  background-color: #0056b3;
+}

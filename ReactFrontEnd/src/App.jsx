@@ -5,6 +5,8 @@ import LoginForm from './Login'
 import RegistrationForm from './Registration'
 import AllProduct from './components/AllProduct'
 import Cart from './components/Cart'
+import OrderDetail from './components/OrderDetail'
+import OrderHistory from './components/OrderHistory'
 import ProductDetail from './components/ProductDetail'
 import Wishlist from './components/Wishlist'
 
@@ -21,6 +23,8 @@ function App() {
             <Route path='/category/:id' element={<AllProduct/>} />
             <Route path='/cart' element={<Cart/>} />
             <Route path='/wishlist' element={<Wishlist/>} />
+            <Route path='/order-history' element={<OrderHistory/>} />
+            <Route path='/order-detail/:id' element={<OrderDetail/>} />
           </Route>
           <Route path='/register' element={<RegistrationForm />}></Route>
           <Route path='/login' element={<LoginForm />}></Route>
