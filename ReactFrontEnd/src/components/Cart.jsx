@@ -159,7 +159,7 @@ function Cart() {
                     confirmButtonText: 'OK',
                     confirmButtonColor: '#4CAF50'
                 }).then(() => {
-                    // this._router.navigate(['/order-history']); // Redirect user
+                    navigate('/order-history');
                 });
             })
     }
@@ -228,7 +228,7 @@ function Cart() {
                     confirmButtonText: 'OK',
                     confirmButtonColor: '#4CAF50'
                 }).then(() => {
-                    // this._router.navigate(['/order-history']); // Redirect user
+                    navigate('/order-history');
                 });
             }, (error) => {
                 Swal.fire({

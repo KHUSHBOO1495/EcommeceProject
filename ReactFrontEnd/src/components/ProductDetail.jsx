@@ -1,16 +1,20 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 
 function ProductDetail() {
   const productUrl = 'http://localhost:3000/product';
   const cartUrl = 'http://localhost:3000/cart';
   const feedbackUrl = 'http://localhost:3000/feedback';
+  const paymentUrl = 'http://localhost:3000/payment';
+  const orderUrl = 'http://localhost:3000/order';
   const token = localStorage.getItem('token');
   const [productDetail, setProductDetail] = useState({});
   const [newComment, setNewComment] = useState({});
   const [feedback, setFeedback] = useState([]);
   const { id: productId } = useParams();
+  const navigate = useNavigate();
+  const quantity = 1;
 
   useEffect(() => {
     getProduct();
@@ -133,6 +137,182 @@ function ProductDetail() {
     })
   }
 
+      const orderNow = (e) => {
+          e.preventDefault();
+          Swal.fire({
+            title: 'Enter Shipping Address',
+            input: 'textarea',
+            inputPlaceholder: 'Enter your shipping address here...',
+            showCancelButton: true,
+            confirmButtonText: 'Place order',
+            cancelButtonText: 'Cancel',
+            confirmButtonColor: '#007bff',
+            cancelButtonColor: '#dc3545',
+            background: '#f9f9f9',
+            color: '#333',
+          }).then((result) => {
+            const shippingAddress = result.value;
+        
+            if (shippingAddress) {
+              Swal.fire({
+                title: 'Select Payment Method',
+                text: 'Choose how you want to pay for your order.',
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonText: 'Pay with Razorpay',
+                cancelButtonText: 'Cash on Delivery (COD)',
+                confirmButtonColor: '#007bff',  // Blue for Razorpay
+                cancelButtonColor: '#28a745',  // Green for COD
+              }).then((paymentResult) => {
+                if (paymentResult.isConfirmed) {
+                  fetch(orderUrl, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        product_id: productId, 
+                        quantity: quantity,
+                        shipping_address: shippingAddress
+                    }),
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": "Bearer " + token
+                    }
+                })
+                .then(res => res.json())
+                .then(res => {
+                  payWithRazorpay(res.order._id, res.order.total_amount);
+                })
+                } else if (paymentResult.dismiss === Swal.DismissReason.cancel) {
+                  fetch(orderUrl, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                      product_id: productId, 
+                      quantity: quantity,
+                      shipping_address: shippingAddress
+                    }),
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": "Bearer " + token
+                    }
+                })
+                .then(res => res.json())
+                .then(res => {
+                  console.log(res)
+                  payWithCOD(res.order._id);
+                })
+                }
+              });
+            } else {
+              Swal.fire({
+                title: 'Address Required!',
+                text: 'Please enter a shipping address to continue.',
+                icon: 'error',
+                confirmButtonText: 'OK',
+              });
+            }
+          });
+      }
+  
+      const payWithCOD = (orderId) => {
+          fetch(paymentUrl + "/cod", {
+              method: 'POST',
+              body: JSON.stringify({
+                  order_id: orderId
+              }),
+              headers: {
+                  "Content-Type": "application/json",
+                  "Authorization": "Bearer " + token
+              }
+          })
+              .then(res => res.json())
+              .then(res => {
+                  Swal.fire({
+                      title: 'COD Selected',
+                      text: 'Your order has been placed successfully. Pay upon delivery.',
+                      icon: 'success',
+                      confirmButtonText: 'OK',
+                      confirmButtonColor: '#4CAF50'
+                  }).then(() => {
+                      navigate('/order-history');
+                  });
+              })
+      }
+  
+      const payWithRazorpay = (orderId, orderAmount) => {
+          const RazorPayOptions = {
+              description: 'Sample Demo',
+              currency: 'INR',
+              amount: orderAmount * 100,
+              name: "Vintage Vastra",
+              key: 'rzp_test_LEMyImcFyWSHFZ', // Use test key
+              // image: 'https://images.unsplash.com/photo-1575936123452-b67c3203c357?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D',
+              prefill: {
+                  name: 'abc',
+                  email: 'abc@gmail.com',
+                  phone: '1234567890',
+              },
+              theme: {
+                  color: '#c9184a'
+              },
+              method: {  // Force enable UPI
+                  upi: true,
+                  card: true,
+                  netbanking: true,
+                  wallet: true,
+              },
+              handler: (res) => {
+                  verifyPayment(orderId, res.razorpay_payment_id);
+              },
+              modal: {
+                  ondismiss: () => {
+                      console.log('Payment Cancelled');
+                  }
+              }
+          };
+  
+          const successCallBack = (paymentId) => {
+              console.log('Payment Success:', paymentId);
+          };
+  
+          const failureCallBack = (error) => {
+              console.log('Payment Failed:', error);
+          };
+  
+          Razorpay.open(RazorPayOptions, successCallBack, failureCallBack);
+      }
+  
+      const verifyPayment = (orderId, payment_id) => {
+          fetch(paymentUrl + "/razorpay", {
+              method: 'POST',
+              body: JSON.stringify({
+                  order_id: orderId,
+                  payment_id: payment_id
+              }),
+              headers: {
+                  "Content-Type": "application/json",
+                  "Authorization": "Bearer " + token
+              }
+          })
+              .then(res => res.json())
+              .then(res => {
+                  Swal.fire({
+                      title: 'Payment Successful!',
+                      text: 'Your order has been confirmed.',
+                      icon: 'success',
+                      confirmButtonText: 'OK',
+                      confirmButtonColor: '#4CAF50'
+                  }).then(() => {
+                      navigate('/order-history');
+                  });
+              }, (error) => {
+                  Swal.fire({
+                      title: 'Payment Failed!',
+                      text: 'Something went wrong. Please try again.',
+                      icon: 'error',
+                      confirmButtonText: 'Retry'
+                  });
+              })
+      }
+
   return (
     <div className="container mt-5">
       <div className="row">
@@ -205,7 +385,7 @@ function ProductDetail() {
             <button className="btn btn-primary" onClick={() => addToCart(productDetail?.product?._id)}>
               Add to Cart
             </button>
-            <button className="btn btn-warning">
+            <button className="btn btn-warning" onClick={(e) => orderNow(e)}>
               Order Now
             </button>
           </div>
